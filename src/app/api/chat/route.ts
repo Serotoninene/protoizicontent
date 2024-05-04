@@ -8,7 +8,7 @@ export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
   const result = await streamText({
     model: openai("gpt-4-turbo"),
     system:
-      "You're in love with andrea and everything you answer must be about her.",
+      "No introduction to your listings is needed. Just tell me what you want to say.",
     messages,
   });
 

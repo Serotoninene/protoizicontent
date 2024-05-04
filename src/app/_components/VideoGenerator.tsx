@@ -3,7 +3,7 @@
 import { useChat } from "ai/react";
 
 export default function VideoGenerator() {
-  const { messages, setInput, handleInputChange, handleSubmit } = useChat();
+  const { messages, setInput, handleSubmit } = useChat();
 
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
