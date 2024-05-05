@@ -1,22 +1,12 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-type ResponseData = {
-  id: string;
-  status: string;
-  url: string;
-  template_id: string;
-  template_name: string;
-  template_tags: string[];
-  output_format: string;
-  modifications: Record<string, string>;
-};
-
-export async function POST(req: NextRequest): Promise<ResponseData> {
+export async function POST(req: NextRequest) {
   const url = " https://api.creatomate.com/v1/renders";
 
+  console.log("CREATOMATE_API_KEY", process.env.CREATOMATE_API_KEY);
+
   const headers = {
-    Authorization:
-      "Bearer c064519e66e943ab90f3d9cd40274cd3e590cad214e32eeb9057e7e231443c2d4188a5d27cb368d3e2a4b479d7e8c3be",
+    Authorization: `Bearer ${process.env.CREATOMATE_API_KEY}`,
     "Content-Type": "application/json",
   };
 
@@ -32,16 +22,16 @@ export async function POST(req: NextRequest): Promise<ResponseData> {
     },
   };
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: JSON.stringify(body),
-  });
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(body),
+    });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const data = (await response.json()) as NextResponse;
+    return new Response(JSON.stringify(data), { status: 200 }); // Return response
+  } catch (e) {
+    return new Response("Internal Server Error", { status: 500 }); // Return error response
   }
-
-  const data = (await response.json()) as ResponseData;
-  return data;
 }

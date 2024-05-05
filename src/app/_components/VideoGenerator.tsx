@@ -1,28 +1,45 @@
 "use client";
 
-import { useChat } from "ai/react";
+import { NextResponse } from "next/server";
+import { useState } from "react";
 
 export default function VideoGenerator() {
-  const { messages, setInput, handleSubmit } = useChat();
+  const [responseData, setResponseData] = useState<NextResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/creatomate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const responseData = (await response.json()) as NextResponse; // Parse JSON response
+
+      setResponseData(responseData); // gives null error 500
+    } catch (error) {
+      setError("An error occurred while fetching the data.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-      {messages.map((m) => (
-        <div key={m.id} className="whitespace-pre-wrap">
-          {m.role === "user" ? "User: " : "AI: "}
-          {m.content}
+    <div>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : responseData ? (
+        <div>
+          <p>Response Data: {JSON.stringify(responseData)}</p>
         </div>
-      ))}
-
-      <form onSubmit={handleSubmit}>
-        <button
-          onClick={() => {
-            setInput("give me 10 ideas for a video on tiktok");
-          }}
-        >
-          Type here
-        </button>
-      </form>
+      ) : (
+        <button onClick={fetchData}>Fetch Data</button>
+      )}
+      {error && <p>Error: {error}</p>}
     </div>
   );
 }
