@@ -12,6 +12,7 @@ What i want is just to be able to click a button and receive ten images with
 [X] first we click the button
 [X] then we show the 10 AI sentences generated
 [X] on click on the wanted sentences -> we create the videos
-[] reorganize the videoGenerator and promptGenerator so when the prompts are selected -> videoGenerator
-[] set up a download button to download what we created
+[X] set up a proto front end
+[] set up the db
+[] set up the authentication
 -->

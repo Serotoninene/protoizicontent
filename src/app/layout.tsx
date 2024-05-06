@@ -1,8 +1,7 @@
-import Navbar from "@/components/molecules/Navbar";
 import "@/styles/globals.css";
+import Navbar from "@/components/molecules/Navbar";
 
 import { Inter } from "next/font/google";
-import Link from "next/link";
 
 const inter = Inter({
   subsets: ["latin"],

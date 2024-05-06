@@ -51,12 +51,12 @@ export default function Hero() {
       <GradientBackground />
       <div className="mx-auto max-w-2xl text-center">
         <h1 className="text-4xl font-bold tracking-tight text-primary-900 sm:text-6xl">
-          Data to enrich your online business
+          AI-Powered Content Creation Made Simple
         </h1>
         <p className="mt-6 text-lg leading-8 text-gray-600">
-          Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem
-          cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat
-          aliqua.
+          Transform your social media game effortlessly. Our AI-powered platform
+          generates endless content ideas, freeing you to focus on what matters:
+          connecting with your audience. Elevate your brand with ease.
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <PrimaryButton>Get Started</PrimaryButton>
