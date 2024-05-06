@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`font-sans ${inter.variable} text-slate-700 px-6 pt-7 max-w-[1077px] mx-auto`}
+        className={`font-sans ${inter.variable} text-primary-700 px-6 pt-7 max-w-[1077px] mx-auto`}
       >
         <Navbar />
         {children}

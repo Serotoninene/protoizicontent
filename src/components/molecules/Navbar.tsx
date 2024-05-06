@@ -14,7 +14,9 @@ export default function Navbar() {
         </Link>
       </div>
       <div className="flex  gap-10">
-        <button className="text-slate-600 hover:text-slate-800">Sign in</button>
+        <button className="text-primary-600 hover:text-primary-800">
+          Sign in
+        </button>
         <PrimaryButton>Get Started</PrimaryButton>
       </div>
     </nav>

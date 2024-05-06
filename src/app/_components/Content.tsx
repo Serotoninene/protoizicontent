@@ -11,7 +11,7 @@ export default function Content() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
           <div className="lg:pr-4">
-            <div className="relative overflow-hidden rounded-3xl bg-gray-900 px-6 pb-9 pt-64 shadow-2xl sm:px-12 lg:max-w-lg lg:px-8 lg:pb-8 xl:px-10 xl:pb-10">
+            <div className="relative overflow-hidden rounded-3xl bg-primary-900 px-6 pb-9 pt-64 shadow-2xl sm:px-12 lg:max-w-lg lg:px-8 lg:pb-8 xl:px-10 xl:pb-10">
               <img
                 className="absolute inset-0 h-full w-full object-cover brightness-125 saturate-0"
                 src="https://images.unsplash.com/photo-1630569267625-157f8f9d1a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2669&q=80"
@@ -65,11 +65,11 @@ export default function Content() {
             </div>
           </div>
           <div>
-            <div className="text-base leading-7 text-slate-700 lg:max-w-lg">
-              <p className="text-base font-semibold leading-7 text-indigo-600">
+            <div className="text-base leading-7 text-primary-700 lg:max-w-lg">
+              <p className="text-base font-semibold leading-7 text-secondary-600">
                 Company values
               </p>
-              <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-primary-900 sm:text-4xl">
                 On a mission to empower remote teams
               </h1>
               <div className="max-w-xl">
@@ -97,13 +97,13 @@ export default function Content() {
                 </p>
               </div>
             </div>
-            <dl className="mt-10 grid grid-cols-2 gap-8 border-t border-gray-900/10 pt-10 sm:grid-cols-4">
+            <dl className="mt-10 grid grid-cols-2 gap-8 border-t border-primary-900/10 pt-10 sm:grid-cols-4">
               {stats.map((stat, statIdx) => (
                 <div key={statIdx}>
-                  <dt className="text-sm font-semibold leading-6 text-slate-600">
+                  <dt className="text-sm font-semibold leading-6 text-primary-600">
                     {stat.label}
                   </dt>
-                  <dd className="mt-2 text-3xl font-bold leading-10 tracking-tight text-slate-900">
+                  <dd className="mt-2 text-3xl font-bold leading-10 tracking-tight text-primary-900">
                     {stat.value}
                   </dd>
                 </div>

@@ -17,7 +17,7 @@ function GradientBackground() {
   return (
     <>
       <div
-        className="absolute inset-x-0 -top-40 pointer-events-none  transform-gpu overflow-hidden blur-3xl sm:-top-80"
+        className="absolute inset-x-0 -top-40 pointer-events-none -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
         aria-hidden="true"
       >
         <div
@@ -30,7 +30,7 @@ function GradientBackground() {
       </div>
 
       <div
-        className="absolute inset-x-0 top-[calc(100%-13rem)] pointer-events-none transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+        className="absolute inset-x-0 top-[calc(100%-13rem)] pointer-events-none -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
         aria-hidden="true"
       >
         <div
@@ -50,7 +50,7 @@ export default function Hero() {
     <div className="relative isolate px-6 lg:px-8 h-[calc(100vh-150px)] flex items-center z-0">
       <GradientBackground />
       <div className="mx-auto max-w-2xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+        <h1 className="text-4xl font-bold tracking-tight text-primary-900 sm:text-6xl">
           Data to enrich your online business
         </h1>
         <p className="mt-6 text-lg leading-8 text-gray-600">
