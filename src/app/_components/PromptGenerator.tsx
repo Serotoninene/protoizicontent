@@ -1,6 +1,7 @@
 "use client";
 
 import { useChat } from "ai/react";
+import { NextResponse } from "next/server";
 import { useEffect, useState } from "react";
 
 function PromptButton({
@@ -51,7 +52,7 @@ export default function PromptGenerator() {
     string[]
   >([]);
 
-  const addPromptToTransform = (prompt: string) => {
+  const togglePromptToTransform = (prompt: string) => {
     const newArray = [...promptsToTransformInVideo];
     if (newArray.includes(prompt)) {
       newArray.splice(newArray.indexOf(prompt), 1);
@@ -60,6 +61,25 @@ export default function PromptGenerator() {
     }
 
     setPromptsToTransformInVideo(newArray);
+  };
+
+  const handleVideoGeneration = async () => {
+    console.log("Generating videos for prompts: ", promptsToTransformInVideo);
+    try {
+      const response = await fetch("/api/creatomate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompts: promptsToTransformInVideo }),
+      });
+
+      const responseData = (await response.json()) as NextResponse; // Parse JSON response
+
+      console.log("Response Data: ", responseData);
+    } catch (error) {
+      console.error("An error occurred while fetching the data.");
+    }
   };
 
   const dummyPrompts =
@@ -92,14 +112,14 @@ export default function PromptGenerator() {
               type="checkbox"
               onClick={(e) => {
                 e.stopPropagation();
-                addPromptToTransform(prompt);
+                togglePromptToTransform(prompt);
               }}
             />
           </div>
         ))}
       </div>
       <button
-        onClick={() => console.log(promptsToTransformInVideo)}
+        onClick={handleVideoGeneration}
         disabled={promptsToTransformInVideo.length === 0}
       >
         Generate video(s)

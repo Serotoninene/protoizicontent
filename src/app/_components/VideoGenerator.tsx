@@ -16,6 +16,11 @@ export default function VideoGenerator() {
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          text1: "énormissime prout",
+          text2: "maaan ça pue",
+          text3: "c'est dégueulasse",
+        }),
       });
 
       const responseData = (await response.json()) as NextResponse; // Parse JSON response

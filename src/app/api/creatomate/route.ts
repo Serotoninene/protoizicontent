@@ -1,9 +1,16 @@
+// api/creatomate/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-  const url = " https://api.creatomate.com/v1/renders";
+interface RequestBody {
+  text1: string;
+  text2: string;
+  text3?: string;
+}
 
-  console.log("CREATOMATE_API_KEY", process.env.CREATOMATE_API_KEY);
+export async function POST(req: NextRequest, res: NextResponse) {
+  const url = " https://api.creatomate.com/v1/renders";
+  const { text1, text2, text3 } = (await req.json()) as RequestBody;
 
   const headers = {
     Authorization: `Bearer ${process.env.CREATOMATE_API_KEY}`,
@@ -13,12 +20,9 @@ export async function POST(req: NextRequest) {
   const body = {
     template_id: "b5c3405f-925f-462d-ba13-ff1116d114b9",
     modifications: {
-      "Text-1":
-        "Did you know you can automate TikTok, Instagram, and YouTube videos? 🔥",
-      "Text-2":
-        "Use any video automation tool to replace these text and background assets with your own! 😊",
-      "Text-3":
-        "Learn how to get started on the Guides & Tutorials page on Creatomate's home page.",
+      "Text-1": text1,
+      "Text-2": text2,
+      "Text-3": text3 ?? "",
     },
   };
 
