@@ -1,3 +1,4 @@
+import Navbar from "@/components/molecules/Navbar";
 import "@/styles/globals.css";
 
 import { Inter } from "next/font/google";
@@ -24,24 +25,7 @@ export default function RootLayout({
       <body
         className={`font-sans ${inter.variable} text-slate-700 px-6 pt-7 max-w-[1077px] mx-auto`}
       >
-        <nav
-          className="flex items-center justify-between p-6 lg:px-8"
-          aria-label="Global"
-        >
-          <div className="flex items-start">
-            <Link href="/" className="-m-1.5 p-1.5 font-bold text-xl">
-              Izy Content
-            </Link>
-          </div>
-          <div className="flex  gap-10">
-            <button className="text-slate-600 hover:text-slate-800">
-              Sign in
-            </button>
-            <button className="bg-blue-500 px-4 py-2 rounded-md text-white hover:bg-blue-400">
-              Get Started
-            </button>
-          </div>
-        </nav>
+        <Navbar />
         {children}
       </body>
     </html>
