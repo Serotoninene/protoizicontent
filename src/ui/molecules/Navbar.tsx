@@ -1,23 +1,9 @@
+import { db } from "@/server/db";
+import { insertUser } from "@/server/lib/user";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import PrimaryButton from "../atoms/PrimaryButton";
-import { db } from "@/server/db";
-import { users } from "@/server/db/schema";
-
-type NewUser = typeof users.$inferInsert;
-
-const insertUser = async (user: NewUser) => {
-  return await db.insert(users).values({
-    id: user.id,
-    email: user.email,
-    role: "basic",
-    firstName: user.firstName,
-    lastName: user.lastName,
-    phone: user.phone,
-    image: user.image,
-  });
-};
 
 const AuthButtons = async () => {
   const user = await currentUser();

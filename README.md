@@ -18,5 +18,8 @@ What i want is just to be able to click a button and receive ten images with
 [X] set up the authentication
 [X] push the user data to the db
 [] set up stripe
+[] create 3 type of abonnements and connect them to the ui
+[] set the user role related to the abonnement in the db
+[] limit access to video creation in function of the role
 [] set up the project
 -->
