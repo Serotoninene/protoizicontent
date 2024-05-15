@@ -1,6 +1,26 @@
-import React from "react";
+import { SignInButton, UserButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import PrimaryButton from "../atoms/PrimaryButton";
+
+const AuthButtons = () => {
+  const { userId } = auth();
+
+  if (userId) {
+    return <UserButton />;
+  }
+
+  return (
+    <>
+      <SignInButton mode="modal">
+        <button className="text-primary-600 hover:text-primary-800">
+          Sign in
+        </button>
+      </SignInButton>
+      <PrimaryButton>Get Started</PrimaryButton>
+    </>
+  );
+};
 
 export default function Navbar() {
   return (
@@ -14,10 +34,7 @@ export default function Navbar() {
         </Link>
       </div>
       <div className="flex  gap-10">
-        <button className="text-primary-600 hover:text-primary-800">
-          Sign in
-        </button>
-        <PrimaryButton>Get Started</PrimaryButton>
+        <AuthButtons />
       </div>
     </nav>
   );
