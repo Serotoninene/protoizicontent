@@ -2,7 +2,8 @@ import Hero from "./_components/Hero";
 import Content from "./_components/Content";
 import Pricing from "./_components/Pricing";
 import CTASection from "./_components/CTASection";
-import Footer from "@/components/molecules/Footer";
+import Footer from "@/ui/molecules/Footer";
+import PromptGenerator from "@/ui/organisms/PromptGenerator";
 
 export default async function HomePage() {
   return (

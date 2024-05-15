@@ -7,7 +7,7 @@ export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
 
   const result = await streamText({
     model: openai("gpt-4-turbo"),
-    system: "No introduction. Just tell me what you want to say. 50 words max",
+    system: "No introduction. Just tell me what you want to say. 100 words max",
     messages,
   });
 

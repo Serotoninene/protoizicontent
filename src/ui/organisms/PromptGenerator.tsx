@@ -82,19 +82,11 @@ export default function PromptGenerator() {
     }
   };
 
-  const dummyPrompts =
-    '1. "The only true wisdom is in knowing you know nothing." - Socrates\n2. "He who has a why to live can bear almost any how." - Friedrich Nietzsche\n3. "To be is to be perceived." - George Berkeley\n4. "One cannot step twice in the same river." - Heraclitus\n5. "The unexamined life is not worth living." - Socrates\n6. "Man is condemned to be free." - Jean-Paul Sartre\n7. "If God did not exist, it would be necessary to invent Him." - Voltaire\n8. "Liberty consists in doing what one desires." - John Stuart Mill\n9. "Life must be understood backward. But it must be lived forwards." - Søren Kierkegaard\n10. "The limits of my language mean the limits of my world." - Ludwig Wittgenstein';
-
-  // for debug we set up the initial prompts
-  useEffect(() => {
-    setPrompts(dummyPrompts.split("\n"));
-  }, []);
-
   if (prompts.length === 0)
     return (
       <div className="flex items-center justify-center w-full h-full bg-blue-300 max-w-md py-24 mx-auto stretch">
         <PromptButton
-          prompt="give me 10 philosophical quote in two sentences that will make me think about life and the universe."
+          prompt="give me 10 personnal development quote in two sentences that will make me think about life and the universe."
           setPrompts={setPrompts}
         />
       </div>

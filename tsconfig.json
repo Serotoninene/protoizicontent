@@ -28,7 +28,7 @@
     "paths": {
       "@/*": ["./src/*"],
       " @server/*": ["./src/server/*"],
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/ui/*"]
     }
   },
   "include": [
