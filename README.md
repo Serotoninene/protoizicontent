@@ -14,8 +14,9 @@ What i want is just to be able to click a button and receive ten images with
 [X] on click on the wanted sentences -> we create the videos
 [X] set up a proto front end
 [X] set up vercel
-[] set up the db
-[] set up the authentication
-[] set up spline
+[X] set up the db
+[X] set up the authentication
+[X] push the user data to the db
+[] set up stripe
 [] set up the project
 -->

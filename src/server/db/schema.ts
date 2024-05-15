@@ -1,15 +1,5 @@
 import { relations, sql } from "drizzle-orm";
-import {
-  index,
-  integer,
-  pgTableCreator,
-  primaryKey,
-  serial,
-  text,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
-import { type AdapterAccount } from "next-auth/adapters";
+import { pgTableCreator, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -21,9 +11,11 @@ export const createTable = pgTableCreator((name) => `protoIzyContent_${name}`);
 
 export const users = createTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
   role: varchar("role", { length: 255 }).notNull().default("basic"),
+  firstName: varchar("firstName", { length: 255 }),
+  lastName: varchar("lastName", { length: 255 }),
+  phone: varchar("phone", { length: 255 }),
   emailVerified: timestamp("emailVerified", {
     mode: "date",
   }).default(sql`CURRENT_TIMESTAMP`),
@@ -38,8 +30,8 @@ export const videos = createTable("video", {
   moodId: text("moodId")
     .notNull()
     .references(() => moods.id),
-  url: varchar("url", { length: 255 }).notNull(),
-  text1: text("text1"),
+  url: varchar("url", { length: 1024 }).notNull(),
+  text1: text("text1").notNull(),
   text2: text("text2"),
   text3: text("text3"),
 });

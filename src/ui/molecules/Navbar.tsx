@@ -1,12 +1,13 @@
 import { SignInButton, UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import PrimaryButton from "../atoms/PrimaryButton";
 
-const AuthButtons = () => {
-  const { userId } = auth();
+const AuthButtons = async () => {
+  const user = await currentUser();
+  console.log(user);
 
-  if (userId) {
+  if (user) {
     return <UserButton />;
   }
 
