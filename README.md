@@ -13,7 +13,7 @@ What i want is just to be able to click a button and receive ten images with
 [X] then we show the 10 AI sentences generated
 [X] on click on the wanted sentences -> we create the videos
 [X] set up a proto front end
-[] set up vercel
+[X] set up vercel
 [] set up the db
 [] set up the authentication
 [] set up spline

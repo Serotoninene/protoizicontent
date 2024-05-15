@@ -4,6 +4,11 @@ import { useChat } from "ai/react";
 import { NextResponse } from "next/server";
 import { useEffect, useState } from "react";
 
+// HERE IS THE FLOW
+// 1. User is prompted to enter the number of videos they want to generate
+// 2. they click the button it generates n prompts
+// 3. they select the prompts they want to transform into videos
+
 function PromptButton({
   prompt,
   setPrompts,
