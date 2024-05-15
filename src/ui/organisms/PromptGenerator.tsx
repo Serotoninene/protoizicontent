@@ -16,11 +16,12 @@ function PromptButton({
 
   useEffect(() => {
     if (!isLoading && messages[messages.length - 1]) {
-      const promptArray = messages[messages.length - 1]!.content.split("\n\n");
-      console.log(JSON.stringify(promptArray));
-      setPrompts(promptArray[0]!.split("\n"));
+      const promptArray = messages[messages.length - 1]?.content;
+      console.log(promptArray);
+      console.log(promptArray?.split("\n"));
+      if (promptArray) setPrompts(promptArray?.split("\n"));
     }
-  }, [isLoading]);
+  }, [isLoading, messages]);
 
   if (isLoading)
     return (
@@ -48,6 +49,7 @@ function PromptButton({
 
 export default function PromptGenerator() {
   const [prompts, setPrompts] = useState<string[]>([]);
+  const [promptNb, setPromptNb] = useState("10");
   const [promptsToTransformInVideo, setPromptsToTransformInVideo] = useState<
     string[]
   >([]);
@@ -84,9 +86,11 @@ export default function PromptGenerator() {
 
   if (prompts.length === 0)
     return (
-      <div className="flex items-center justify-center w-full h-full bg-blue-300 max-w-md py-24 mx-auto stretch">
+      <div className="flex flex-col items-center justify-center gap-4 w-full h-full bg-blue-300 max-w-md py-24 mx-auto stretch">
+        <h2>How many videos would you like to generate ?</h2>
+        <input type="number" onChange={(e) => setPromptNb(e.target.value)} />
         <PromptButton
-          prompt="give me 10 personnal development quote in two sentences that will make me think about life and the universe."
+          prompt={`give me ${promptNb} personnal development quote in two sentences that will make me think about life and the universe.`}
           setPrompts={setPrompts}
         />
       </div>
@@ -94,7 +98,6 @@ export default function PromptGenerator() {
 
   return (
     <div className="px-24 py-32">
-      <h2>Hello</h2>
       <div className="flex flex-col gap-2">
         {prompts.map((prompt, i) => (
           <div key={i} className="flex justify-between">
