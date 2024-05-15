@@ -15,6 +15,7 @@ export const users = createTable("user", {
   firstName: varchar("firstName", { length: 255 }),
   lastName: varchar("lastName", { length: 255 }),
   email: varchar("email", { length: 255 }),
+  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }).notNull(),
   phone: varchar("phone", { length: 255 }),
   emailVerified: timestamp("emailVerified", {
     mode: "date",

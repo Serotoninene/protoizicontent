@@ -11,6 +11,7 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    STRIPE_SECRET_KEY: z.string(),
     OPENAI_API_KEY: z.string(),
     CREATOMATE_API_KEY: z.string(),
     // DISCORD_CLIENT_ID: z.string(),
@@ -33,6 +34,7 @@ export const env = createEnv({
   runtimeEnv: {
     POSTGRES_URL: process.env.POSTGRES_URL,
     NODE_ENV: process.env.NODE_ENV,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     CREATOMATE_API_KEY: process.env.CREATOMATE_API_KEY,
     // DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
