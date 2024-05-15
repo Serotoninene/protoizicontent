@@ -1,13 +1,46 @@
 import { SignInButton, UserButton } from "@clerk/nextjs";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import PrimaryButton from "../atoms/PrimaryButton";
+import { db } from "@/server/db";
+import { users } from "@/server/db/schema";
+
+type NewUser = typeof users.$inferInsert;
+
+const insertUser = async (user: NewUser) => {
+  return await db.insert(users).values({
+    id: user.id,
+    email: user.email,
+    role: "basic",
+    firstName: user.firstName,
+    lastName: user.lastName,
+    phone: user.phone,
+    image: user.image,
+  });
+};
 
 const AuthButtons = async () => {
   const user = await currentUser();
-  console.log(user);
 
   if (user) {
+    const dbUser = await db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.id, user.id),
+    });
+
+    if (!dbUser) {
+      const newUser = {
+        id: user.id,
+        email: user.emailAddresses[0]?.emailAddress,
+        role: "basic",
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phoneNumbers[0]?.phoneNumber,
+        image: user.imageUrl,
+      };
+
+      await insertUser(newUser);
+    }
+
     return <UserButton />;
   }
 

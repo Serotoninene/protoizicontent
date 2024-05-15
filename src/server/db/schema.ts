@@ -11,10 +11,10 @@ export const createTable = pgTableCreator((name) => `protoIzyContent_${name}`);
 
 export const users = createTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  email: varchar("email", { length: 255 }).notNull(),
   role: varchar("role", { length: 255 }).notNull().default("basic"),
   firstName: varchar("firstName", { length: 255 }),
   lastName: varchar("lastName", { length: 255 }),
+  email: varchar("email", { length: 255 }),
   phone: varchar("phone", { length: 255 }),
   emailVerified: timestamp("emailVerified", {
     mode: "date",
