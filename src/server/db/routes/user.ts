@@ -4,7 +4,7 @@ import stripe from "@/server/lib/stripe";
 
 type NewUser = Omit<typeof users.$inferInsert, "stripeCustomerId">;
 
-export const insertUser = async (user: NewUser) => {
+export const createUser = async (user: NewUser) => {
   const stripeCustomer = await stripe.customers.create({
     email: user.email ?? undefined,
     name: `${user.firstName} ${user.lastName}` ?? undefined,

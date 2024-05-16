@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { insertUser } from "@/server/db/routes/user";
+import { createUser } from "@/server/db/routes/user";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
@@ -23,7 +23,7 @@ const AuthButtons = async () => {
         phone: user.phoneNumbers[0]?.phoneNumber,
         image: user.imageUrl,
       };
-      await insertUser(newUser);
+      await createUser(newUser);
     }
 
     return <UserButton />;

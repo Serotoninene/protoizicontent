@@ -18,9 +18,10 @@ What i want is just to be able to click a button and receive ten images with
 [X] set up the authentication
 [X] push the user data to the db
 [X] set up stripe
-[] perhaps create a ROLE table and make a connection between each user and each role
 [] create 3 type of abonnements and connect them to the ui
 [] set the user role related to the abonnement in the db
+[] add the product ID from stripe to the tier table and call it in the buy server action
 [] limit access to video creation in function of the role
+[] generate the production stripe keys (all the env variables but also the products api)
 [] set up the project
 -->

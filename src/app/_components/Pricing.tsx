@@ -1,11 +1,23 @@
+import { redirect } from "next/navigation";
 import { CheckIcon } from "@heroicons/react/20/solid";
+import { db } from "@/server/db";
+import stripe from "@/server/lib/stripe";
+import { currentUser } from "@clerk/nextjs/server";
+
+type Tier = {
+  name: string;
+  id: string;
+  priceMonthly: string;
+  description: string;
+  features: string[];
+  mostPopular: boolean;
+};
 
 const tiers = [
   {
-    name: "Freelancer",
+    name: "Basic",
     id: "tier-freelancer",
-    href: "#",
-    priceMonthly: "$24",
+    priceMonthly: "$0",
     description: "The essentials to provide your best work for clients.",
     features: [
       "5 products",
@@ -16,10 +28,9 @@ const tiers = [
     mostPopular: false,
   },
   {
-    name: "Startup",
+    name: "Advanced",
     id: "tier-startup",
-    href: "#",
-    priceMonthly: "$32",
+    priceMonthly: "$10",
     description: "A plan that scales with your rapidly growing business.",
     features: [
       "25 products",
@@ -31,10 +42,9 @@ const tiers = [
     mostPopular: true,
   },
   {
-    name: "Enterprise",
+    name: "Premium",
     id: "tier-enterprise",
-    href: "#",
-    priceMonthly: "$48",
+    priceMonthly: "$20",
     description: "Dedicated support and infrastructure for your company.",
     features: [
       "Unlimited products",
@@ -50,6 +60,62 @@ const tiers = [
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
+
+const BuyButton = ({ tier }: { tier: Tier }) => {
+  const handleSwitchPlan = async () => {
+    "use server";
+    const session = await currentUser();
+
+    if (!session) throw new Error("User not found");
+
+    const user = await db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.id, session.id),
+    });
+
+    if (!user) throw new Error("User not found");
+    if (!user.stripeCustomerId) throw new Error("Stripe customer not found");
+
+    const stripeSession = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      payment_method_types: ["card", "paypal", "link"],
+      customer: user.stripeCustomerId,
+      line_items: [
+        {
+          price:
+            process.env.NODE_ENV === "development"
+              ? "price_1PH2HTIMTPsAhoA4jc5DHRpN"
+              : "",
+          quantity: 1,
+        },
+      ],
+      success_url:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/success"
+          : `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
+      cancel_url:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/"
+          : `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+    });
+
+    if (!stripeSession.url) throw new Error("Stripe session not found");
+    redirect(stripeSession.url);
+  };
+  return (
+    <form action={handleSwitchPlan} className="flex justify-center">
+      <button
+        className={classNames(
+          tier.mostPopular
+            ? "bg-secondary-600 text-white shadow-sm hover:bg-secondary-500"
+            : "text-secondary-600 ring-1 ring-inset ring-secondary-200 hover:ring-secondary-300",
+          "mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-600",
+        )}
+      >
+        Buy plan
+      </button>
+    </form>
+  );
+};
 
 export default function Pricing() {
   return (
@@ -123,18 +189,7 @@ export default function Pricing() {
                   ))}
                 </ul>
               </div>
-              <a
-                href={tier.href}
-                aria-describedby={tier.id}
-                className={classNames(
-                  tier.mostPopular
-                    ? "bg-secondary-600 text-white shadow-sm hover:bg-secondary-500"
-                    : "text-secondary-600 ring-1 ring-inset ring-secondary-200 hover:ring-secondary-300",
-                  "mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-600",
-                )}
-              >
-                Buy plan
-              </a>
+              <BuyButton tier={tier} />
             </div>
           ))}
         </div>
