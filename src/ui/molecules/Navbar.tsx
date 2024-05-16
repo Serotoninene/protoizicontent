@@ -17,9 +17,9 @@ const AuthButtons = async () => {
       const newUser = {
         id: user.id,
         email: user.emailAddresses[0]?.emailAddress,
-        role: "basic",
         firstName: user.firstName,
         lastName: user.lastName,
+        role: "USER",
         phone: user.phoneNumbers[0]?.phoneNumber,
         image: user.imageUrl,
       };
@@ -49,7 +49,7 @@ export default function Navbar() {
     >
       <div className="flex items-start">
         <Link href="/" className="-m-1.5 p-1.5 font-bold text-xl">
-          Izy Content
+          BuzzClip
         </Link>
       </div>
       <div className="flex  gap-10">

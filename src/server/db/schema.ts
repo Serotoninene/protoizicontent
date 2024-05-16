@@ -1,5 +1,11 @@
 import { relations, sql } from "drizzle-orm";
-import { pgTableCreator, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import {
+  numeric,
+  pgTableCreator,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -11,7 +17,8 @@ export const createTable = pgTableCreator((name) => `protoIzyContent_${name}`);
 
 export const users = createTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  role: varchar("role", { length: 255 }).notNull().default("basic"),
+  role: varchar("role", { length: 255 }).notNull().default("USER"),
+  tierId: varchar("tierId", { length: 255 }).notNull().default("1"),
   firstName: varchar("firstName", { length: 255 }),
   lastName: varchar("lastName", { length: 255 }),
   email: varchar("email", { length: 255 }),
@@ -21,6 +28,16 @@ export const users = createTable("user", {
     mode: "date",
   }).default(sql`CURRENT_TIMESTAMP`),
   image: varchar("image", { length: 255 }),
+});
+
+export const tiers = createTable("tier", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  price: numeric("price", {
+    precision: 4,
+    scale: 2,
+  }).notNull(),
+  currency: varchar("currency", { length: 3 }).notNull(), // Assuming ISO currency codes (e.g., USD, EUR)
 });
 
 export const videos = createTable("video", {
@@ -42,13 +59,18 @@ export const moods = createTable("mood", {
   name: varchar("name", { length: 255 }).notNull(),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
   videos: many(videos),
+  tier: one(tiers, { fields: [users.tierId], references: [tiers.id] }),
 }));
 
 export const videosRelations = relations(videos, ({ one }) => ({
   user: one(users, { fields: [videos.userId], references: [users.id] }),
   mood: one(moods, { fields: [videos.moodId], references: [moods.id] }),
+}));
+
+export const tiersRelations = relations(tiers, ({ many }) => ({
+  users: many(users),
 }));
 
 export const moodsRelations = relations(moods, ({ many }) => ({

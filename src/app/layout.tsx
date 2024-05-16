@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "IzyContent",
+  title: "BuzzClip",
   description: "Transforming Ideas into Engaging Videos Effortlessly!",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
