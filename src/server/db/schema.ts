@@ -38,6 +38,7 @@ export const tiers = createTable("tier", {
     scale: 2,
   }).notNull(),
   currency: varchar("currency", { length: 3 }).notNull(), // Assuming ISO currency codes (e.g., USD, EUR)
+  productId: varchar("productId", { length: 255 }),
 });
 
 export const videos = createTable("video", {
