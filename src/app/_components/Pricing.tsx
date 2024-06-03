@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { db } from "@/server/db";
 import stripe from "@/server/lib/stripe";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 type Tier = {
   name: string;
@@ -68,7 +68,10 @@ const BuyButton = ({ tier }: { tier: Tier }) => {
     const session = await currentUser();
 
     // to do : if no user redirect to the login
-    if (!session) throw new Error("User not found");
+    if (!session) {
+      auth().redirectToSignIn();
+      return;
+    }
 
     const user = await db.query.users.findFirst({
       where: (users, { eq }) => eq(users.id, session.id),
@@ -100,6 +103,7 @@ const BuyButton = ({ tier }: { tier: Tier }) => {
     if (!stripeSession.url) throw new Error("Stripe session not found");
     redirect(stripeSession.url);
   };
+
   return (
     <form action={handleSwitchPlan} className="flex justify-center">
       <button
