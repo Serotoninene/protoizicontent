@@ -11,12 +11,13 @@ type Tier = {
   description: string;
   features: string[];
   mostPopular: boolean;
+  productId?: string;
 };
 
-const tiers = [
+const tiers: Tier[] = [
   {
     name: "Basic",
-    id: "tier-freelancer",
+    id: "1",
     priceMonthly: "$0",
     description: "The essentials to provide your best work for clients.",
     features: [
@@ -29,7 +30,7 @@ const tiers = [
   },
   {
     name: "Advanced",
-    id: "tier-startup",
+    id: "2",
     priceMonthly: "$10",
     description: "A plan that scales with your rapidly growing business.",
     features: [
@@ -43,8 +44,8 @@ const tiers = [
   },
   {
     name: "Premium",
-    id: "tier-enterprise",
-    priceMonthly: "$20",
+    id: "3",
+    priceMonthly: "$25",
     description: "Dedicated support and infrastructure for your company.",
     features: [
       "Unlimited products",
@@ -66,6 +67,7 @@ const BuyButton = ({ tier }: { tier: Tier }) => {
     "use server";
     const session = await currentUser();
 
+    // to do : if no user redirect to the login
     if (!session) throw new Error("User not found");
 
     const user = await db.query.users.findFirst({
@@ -81,10 +83,7 @@ const BuyButton = ({ tier }: { tier: Tier }) => {
       customer: user.stripeCustomerId,
       line_items: [
         {
-          price:
-            process.env.NODE_ENV === "development"
-              ? "price_1PH2HTIMTPsAhoA4jc5DHRpN"
-              : "",
+          price: tier.productId,
           quantity: 1,
         },
       ],
@@ -117,7 +116,17 @@ const BuyButton = ({ tier }: { tier: Tier }) => {
   );
 };
 
-export default function Pricing() {
+export default async function Pricing() {
+  const dbTier = await db.query.tiers.findMany();
+
+  tiers.forEach((tier) => {
+    const foundTier = dbTier.find((t) => t.id === tier.id);
+    if (foundTier) {
+      tier.priceMonthly = `${foundTier.price} ${foundTier.currency}`;
+      tier.productId = foundTier.productId ?? undefined;
+    }
+  });
+
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
