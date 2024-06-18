@@ -18,7 +18,8 @@ export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
 
   const stream = result.toAIStream({
     async onFinal(data) {
-      // Save the conversation to the database
+      // Save the message to the database
+      console.log(data);
     },
   });
 

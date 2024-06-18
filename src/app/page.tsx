@@ -17,10 +17,7 @@ export default async function HomePage() {
       where: (conversations, { eq }) => eq(conversations.userId, user.id),
     });
 
-    console.log(conversation);
-
     if (!conversation) {
-      console.log("creating a new conv");
       await db.insert(conversations).values({
         id: "1",
         userId: user.id,
@@ -30,7 +27,7 @@ export default async function HomePage() {
 
   return (
     <main className="relative min-h-screen h-screen z-0">
-      <PromptGenerator />
+      <PromptGenerator conversation={conversation} />
       <Hero />
       <Content />
       <Pricing />

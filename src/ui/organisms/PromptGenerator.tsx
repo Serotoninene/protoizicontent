@@ -4,12 +4,25 @@ import type { NextResponse } from "next/server";
 import { useState } from "react";
 import PromptButton from "../molecules/PromptButton";
 
-export default function PromptGenerator() {
+type Conversation = {
+  id: string;
+  userId: string;
+  moodId: string;
+  createdAt: Date | null;
+};
+
+type Props = {
+  conversation: Conversation | undefined;
+};
+
+export default function PromptGenerator({ conversation }: Props) {
   const [prompts, setPrompts] = useState<string[]>([]);
   const [promptNb, setPromptNb] = useState("10");
   const [promptsToTransformInVideo, setPromptsToTransformInVideo] = useState<
     string[]
   >([]);
+
+  console.log(conversation);
 
   const togglePromptToTransform = (prompt: string) => {
     const newArray = [...promptsToTransformInVideo];
@@ -42,6 +55,7 @@ export default function PromptGenerator() {
         <h2>How many videos would you like to generate ?</h2>
         <input type="number" onChange={(e) => setPromptNb(e.target.value)} />
         <PromptButton
+          conversationId={conversation.id}
           prompt={`give me ${promptNb} personnal development quote in two sentences that will make me think about life and the universe.`}
           setPrompts={setPrompts}
         />

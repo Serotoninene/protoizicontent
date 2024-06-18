@@ -6,15 +6,20 @@ import { useEffect } from "react";
 
 interface Props {
   prompt: string;
+  conversationId: string | undefined;
   setPrompts: (prompts: string[]) => void;
 }
 
-export default function PromptButton({ prompt, setPrompts }: Props) {
+export default function PromptButton({
+  prompt,
+  conversationId,
+  setPrompts,
+}: Props) {
   const { user } = useUser();
 
   const { messages, setInput, handleSubmit, isLoading, setMessages } = useChat({
     body: {
-      conversation_id: "",
+      conversation_id: conversationId,
     },
   });
 
