@@ -1,7 +1,7 @@
 "use client";
 
 import type { NextResponse } from "next/server";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PromptButton from "../molecules/PromptButton";
 
 type Conversation = {
@@ -21,8 +21,6 @@ export default function PromptGenerator({ conversation }: Props) {
   const [promptsToTransformInVideo, setPromptsToTransformInVideo] = useState<
     string[]
   >([]);
-
-  console.log(conversation);
 
   const togglePromptToTransform = (prompt: string) => {
     const newArray = [...promptsToTransformInVideo];
@@ -48,6 +46,19 @@ export default function PromptGenerator({ conversation }: Props) {
       (await response.json()) as NextResponse; // Parse JSON response
     } catch (error) {}
   };
+
+  useEffect(() => {
+    fetch("/api/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ conversation_id: conversation?.id }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  });
 
   if (prompts.length === 0)
     return (
