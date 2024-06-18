@@ -1,6 +1,6 @@
 "use client";
 
-import { NextResponse } from "next/server";
+import type { NextResponse } from "next/server";
 import { useState } from "react";
 import PromptButton from "../molecules/PromptButton";
 
@@ -23,7 +23,6 @@ export default function PromptGenerator() {
   };
 
   const handleVideoGeneration = async () => {
-    console.log("Generating videos for prompts: ", promptsToTransformInVideo);
     try {
       const response = await fetch("/api/creatomate", {
         method: "POST",
@@ -33,12 +32,8 @@ export default function PromptGenerator() {
         body: JSON.stringify({ prompts: promptsToTransformInVideo }),
       });
 
-      const responseData = (await response.json()) as NextResponse; // Parse JSON response
-
-      console.log("Response Data: ", responseData);
-    } catch (error) {
-      console.error("An error occurred while fetching the data.");
-    }
+      (await response.json()) as NextResponse; // Parse JSON response
+    } catch (error) {}
   };
 
   if (prompts.length === 0)

@@ -60,8 +60,31 @@ export const moods = createTable("mood", {
   name: varchar("name", { length: 255 }).notNull(),
 });
 
+export const conversations = createTable("conversation", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("userId", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  createdAt: timestamp("createdAt", { mode: "date" }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+});
+
+export const messages = createTable("message", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  conversationId: varchar("conversationId", { length: 255 })
+    .notNull()
+    .references(() => conversations.id),
+  role: varchar("role", { length: 50 }).notNull(),
+  content: text("content").notNull(),
+  timestamp: timestamp("timestamp", { mode: "date" }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+});
+
 export const usersRelations = relations(users, ({ many, one }) => ({
   videos: many(videos),
+  conversations: many(conversations),
   tier: one(tiers, { fields: [users.tierId], references: [tiers.id] }),
 }));
 
@@ -76,4 +99,22 @@ export const tiersRelations = relations(tiers, ({ many }) => ({
 
 export const moodsRelations = relations(moods, ({ many }) => ({
   videos: many(videos),
+}));
+
+export const conversationsRelations = relations(
+  conversations,
+  ({ one, many }) => ({
+    user: one(users, {
+      fields: [conversations.userId],
+      references: [users.id],
+    }),
+    messages: many(messages),
+  }),
+);
+
+export const messagesRelations = relations(messages, ({ one }) => ({
+  conversation: one(conversations, {
+    fields: [messages.conversationId],
+    references: [conversations.id],
+  }),
 }));

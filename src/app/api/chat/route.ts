@@ -1,15 +1,23 @@
 import { openai } from "@ai-sdk/openai";
-import { NextRequest } from "next/server";
-import { CoreMessage, StreamingTextResponse, streamText } from "ai";
+import { StreamingTextResponse, streamText } from "ai";
+
+import type { CoreMessage } from "ai";
+import { type NextRequest } from "next/server";
 
 export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
   const { messages } = (await req.json()) as { messages: CoreMessage[] };
 
   const result = await streamText({
     model: openai("gpt-4-turbo"),
-    system: "No introduction. Just tell me what you want to say. 100 words max",
-    messages,
+    messages: messages,
+    system: "chat",
   });
 
-  return new StreamingTextResponse(result.toAIStream());
+  const stream = result.toAIStream({
+    async onFinal(data) {
+      // saveChat(data);
+    },
+  });
+
+  return new StreamingTextResponse(stream, {});
 }
