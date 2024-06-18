@@ -23,7 +23,7 @@ export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
     async onFinal(data) {
       // Save the message to the database
       await db.insert(messagesDb).values({
-        id: uuidv4() as string, // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+        id: uuidv4() as string,
         conversationId: conversation_id as string,
         role: "assistant",
         content: data,
