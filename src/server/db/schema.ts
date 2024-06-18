@@ -61,13 +61,11 @@ export const moods = createTable("mood", {
 });
 
 export const conversations = createTable("conversation", {
-  id: varchar("id", { length: 255 })
-    .notNull()
-    .primaryKey()
-    .default(sql`gen_random_uuid()`), // Using UUID as primary key
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
   userId: varchar("userId", { length: 255 })
     .notNull()
     .references(() => users.id),
+  moodId: varchar("moodId", { length: 255 }).notNull().default("1"),
   createdAt: timestamp("createdAt", { mode: "date" }).default(
     sql`CURRENT_TIMESTAMP`,
   ),
@@ -102,6 +100,7 @@ export const tiersRelations = relations(tiers, ({ many }) => ({
 
 export const moodsRelations = relations(moods, ({ many }) => ({
   videos: many(videos),
+  conversations: many(conversations),
 }));
 
 export const conversationsRelations = relations(
@@ -110,6 +109,10 @@ export const conversationsRelations = relations(
     user: one(users, {
       fields: [conversations.userId],
       references: [users.id],
+    }),
+    moods: one(moods, {
+      fields: [conversations.moodId],
+      references: [moods.id],
     }),
     messages: many(messages),
   }),
