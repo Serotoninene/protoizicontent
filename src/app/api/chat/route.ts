@@ -1,11 +1,12 @@
 import { openai } from "@ai-sdk/openai";
-import { StreamingTextResponse, streamText } from "ai";
+import { StreamingTextResponse, streamText, type CoreMessage } from "ai";
 
-import type { CoreMessage } from "ai";
 import { type NextRequest } from "next/server";
 
 export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
-  const { messages } = (await req.json()) as { messages: CoreMessage[] };
+  const { messages, conversation_id } = (await req.json()) as {
+    messages: CoreMessage[];
+  };
 
   const result = await streamText({
     model: openai("gpt-4-turbo"),
@@ -15,7 +16,7 @@ export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
 
   const stream = result.toAIStream({
     async onFinal(data) {
-      // saveChat(data);
+      // Save the conversation to the database
     },
   });
 

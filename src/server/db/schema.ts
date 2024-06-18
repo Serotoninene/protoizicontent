@@ -61,7 +61,10 @@ export const moods = createTable("mood", {
 });
 
 export const conversations = createTable("conversation", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  id: varchar("id", { length: 255 })
+    .notNull()
+    .primaryKey()
+    .default(sql`gen_random_uuid()`), // Using UUID as primary key
   userId: varchar("userId", { length: 255 })
     .notNull()
     .references(() => users.id),

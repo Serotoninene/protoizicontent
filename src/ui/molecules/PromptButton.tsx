@@ -9,11 +9,13 @@ interface Props {
   setPrompts: (prompts: string[]) => void;
 }
 
-// HERE IS THE FLOW OF THE COMPONENTS
 export default function PromptButton({ prompt, setPrompts }: Props) {
   const { user } = useUser();
+
   const { messages, setInput, handleSubmit, isLoading, setMessages } = useChat({
-    id: user?.id,
+    body: {
+      conversation_id: "",
+    },
   });
 
   useEffect(() => {
@@ -44,6 +46,11 @@ export default function PromptButton({ prompt, setPrompts }: Props) {
       >
         Type here
       </button>
+      <div className="w-full bg-red-100">
+        {messages.map((m) => {
+          if (m.role === "assistant") return <div key={m.id}>{m.content}</div>;
+        })}
+      </div>
     </form>
   );
 }
