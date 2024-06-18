@@ -13,6 +13,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   });
 
   const coreMessages = messages.map((message) => ({
+    id: message.id,
     role: message.role,
     content: message.content,
   }));

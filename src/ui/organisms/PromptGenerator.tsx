@@ -1,8 +1,10 @@
 "use client";
 
-import type { NextResponse } from "next/server";
 import { useEffect, useState } from "react";
+import type { NextResponse } from "next/server";
 import PromptButton from "../molecules/PromptButton";
+
+import type { CoreMessage, Message } from "ai";
 
 type Conversation = {
   id: string;
@@ -18,6 +20,7 @@ type Props = {
 export default function PromptGenerator({ conversation }: Props) {
   const [prompts, setPrompts] = useState<string[]>([]);
   const [promptNb, setPromptNb] = useState("10");
+  const [initialMessages, setInitialMessages] = useState<Message[]>([]);
   const [promptsToTransformInVideo, setPromptsToTransformInVideo] = useState<
     string[]
   >([]);
@@ -56,9 +59,9 @@ export default function PromptGenerator({ conversation }: Props) {
       body: JSON.stringify({ conversation_id: conversation?.id }),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data))
+      .then((data) => setInitialMessages(data as Message[]))
       .catch((err) => console.log(err));
-  });
+  }, []);
 
   if (prompts.length === 0)
     return (
@@ -66,8 +69,9 @@ export default function PromptGenerator({ conversation }: Props) {
         <h2>How many videos would you like to generate ?</h2>
         <input type="number" onChange={(e) => setPromptNb(e.target.value)} />
         <PromptButton
+          initialMessages={initialMessages}
           conversationId={conversation.id}
-          prompt={`give me ${promptNb} personnal development quote in two sentences that will make me think about life and the universe.`}
+          prompt={`what is the last quote you gave me ?`}
           setPrompts={setPrompts}
         />
       </div>

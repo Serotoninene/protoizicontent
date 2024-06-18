@@ -1,17 +1,20 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
+import type { Message } from "ai";
 import { useChat } from "ai/react";
 import { useEffect } from "react";
 
 interface Props {
   prompt: string;
   conversationId: string | undefined;
+  initialMessages: Message[];
   setPrompts: (prompts: string[]) => void;
 }
 
 export default function PromptButton({
   prompt,
+  initialMessages,
   conversationId,
   setPrompts,
 }: Props) {
@@ -21,6 +24,7 @@ export default function PromptButton({
     body: {
       conversation_id: conversationId,
     },
+    initialMessages: initialMessages,
   });
 
   useEffect(() => {
@@ -30,14 +34,14 @@ export default function PromptButton({
     }
   }, [isLoading, messages]);
 
-  if (isLoading)
-    return (
-      <div className="w-full bg-red-100">
-        {messages.map((m) => {
-          if (m.role === "assistant") return <div key={m.id}>{m.content}</div>;
-        })}
-      </div>
-    );
+  // if (isLoading)
+  //   return (
+  //     <div className="w-full bg-red-100">
+  //       {messages.map((m) => {
+  //         if (m.role === "assistant") return <div key={m.id}>{m.content}</div>;
+  //       })}
+  //     </div>
+  //   );
 
   return (
     <form onSubmit={handleSubmit}>
