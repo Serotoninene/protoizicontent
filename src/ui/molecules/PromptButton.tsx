@@ -14,7 +14,6 @@ interface Props {
 
 export default function PromptButton({
   prompt,
-  initialMessages,
   conversationId,
   setPrompts,
 }: Props) {
@@ -24,7 +23,6 @@ export default function PromptButton({
     body: {
       conversation_id: conversationId,
     },
-    initialMessages: initialMessages,
   });
 
   useEffect(() => {
@@ -34,14 +32,14 @@ export default function PromptButton({
     }
   }, [isLoading, messages]);
 
-  // if (isLoading)
-  //   return (
-  //     <div className="w-full bg-red-100">
-  //       {messages.map((m) => {
-  //         if (m.role === "assistant") return <div key={m.id}>{m.content}</div>;
-  //       })}
-  //     </div>
-  //   );
+  if (isLoading)
+    return (
+      <div className="w-full bg-red-100">
+        {messages.map((m) => {
+          if (m.role === "assistant") return <div key={m.id}>{m.content}</div>;
+        })}
+      </div>
+    );
 
   return (
     <form onSubmit={handleSubmit}>
@@ -55,11 +53,6 @@ export default function PromptButton({
       >
         Type here
       </button>
-      <div className="w-full bg-red-100">
-        {messages.map((m) => {
-          if (m.role === "assistant") return <div key={m.id}>{m.content}</div>;
-        })}
-      </div>
     </form>
   );
 }

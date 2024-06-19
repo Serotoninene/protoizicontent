@@ -1,35 +1,57 @@
 import { openai } from "@ai-sdk/openai";
-import { StreamingTextResponse, streamText, type CoreMessage } from "ai";
+import {
+  StreamData,
+  StreamingTextResponse,
+  streamText,
+  type CoreMessage,
+} from "ai";
 import { v4 as uuidv4 } from "uuid";
 
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { db } from "@/server/db";
 import { messages as messagesDb } from "@/server/db/schema";
 
 export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
-  const { messages, conversation_id } = (await req.json()) as {
-    messages: CoreMessage[];
-  };
+  try {
+    const { messages, conversation_id } = (await req.json()) as {
+      messages: CoreMessage[];
+    };
 
-  // needs to get the message history thhrough the conversation_id
+    const initialMessages = await db.query.messages.findMany({
+      where: (messages, { eq }) =>
+        eq(messages.conversationId, conversation_id as string),
+    });
 
-  const result = await streamText({
-    model: openai("gpt-4-turbo"),
-    messages: messages,
-    system: "chat",
-  });
+    console.log(initialMessages);
 
-  const stream = result.toAIStream({
-    async onFinal(data) {
-      // Save the message to the database
-      await db.insert(messagesDb).values({
-        id: uuidv4() as string,
-        conversationId: conversation_id as string,
-        role: "assistant",
-        content: data,
-      });
-    },
-  });
+    // needs to get the message history thhrough the conversation_id
+    const result = await streamText({
+      model: openai("gpt-4-turbo"),
+      messages: messages,
+      system: "chat",
+    });
 
-  return new StreamingTextResponse(stream, {});
+    const dataStream = new StreamData();
+
+    dataStream.append({ previousMessages: JSON.stringify(initialMessages) });
+
+    const stream = result.toAIStream({
+      async onFinal(data) {
+        // Save the message to the database
+        await db.insert(messagesDb).values({
+          id: uuidv4() as string,
+          conversationId: conversation_id as string,
+          role: "assistant",
+          content: data,
+        });
+
+        await dataStream.close();
+      },
+    });
+
+    return new StreamingTextResponse(stream, {});
+  } catch (e) {
+    console.log(e);
+    return new NextResponse("Error", { status: 500 });
+  }
 }
