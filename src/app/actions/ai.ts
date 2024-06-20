@@ -1,11 +1,10 @@
-"use server";
-
 import { openai } from "@ai-sdk/openai";
-import { CoreMessage, streamText } from "ai";
-import { createAI, createStreamableValue } from "ai/rsc";
+import { CoreMessage, generateText, streamText } from "ai";
+import { createAI, createStreamableValue, getAIState } from "ai/rsc";
 import { ReactNode } from "react";
 
-export async function sendMessage(messages: CoreMessage[]) {
+export async function continueConversation(messages: CoreMessage[]) {
+  "use server";
   const result = await streamText({
     model: openai("gpt-4-turbo"),
     messages,
@@ -13,6 +12,23 @@ export async function sendMessage(messages: CoreMessage[]) {
 
   const stream = createStreamableValue(result.textStream);
   return stream.value;
+}
+
+export async function sendMessage(message: string) {
+  "use server";
+  console.log("start sendMessage");
+  const history = getAIState() as AIState;
+
+  console.log("got history : ", history);
+
+  const response = await generateText({
+    model: openai("gpt-3.5-turbo"),
+    messages: [...history, { role: "user", content: message }],
+  });
+
+  console.log("after response : ", response);
+
+  return JSON.stringify(response);
 }
 
 // Define the AI state and UI state types
@@ -24,7 +40,7 @@ export type ServerMessage = {
 export type ClientMessage = {
   id: string;
   role: "user" | "assistant";
-  display: ReactNode;
+  display: string;
 };
 
 export type AIState = ServerMessage[];
