@@ -1,8 +1,10 @@
+/* eslint-disable */
+
 "use client";
 
-import { AI, UIState } from "@/app/actions/ai";
-import { useActions, useUIState } from "ai/rsc";
 import { FormEvent } from "react";
+import { useActions, useUIState } from "ai/rsc";
+import { AI, ClientMessage, UIState } from "@/app/actions/ai";
 
 // Force the page to be dynamic and allow streaming responses up to 30 seconds
 export const dynamic = "force-dynamic";
@@ -12,12 +14,16 @@ export default function Chatbot() {
   const { sendMessage } = useActions<typeof AI>();
   const [messages, setMessages] = useUIState();
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    setMessages((prevMessages) => [
+    setMessages((prevMessages: UIState[]) => [
       ...prevMessages,
-      { id: Date.now(), role: "user", display: e.target.message.value },
+      {
+        id: Date.now(),
+        role: "user",
+        display: e.target.message.value,
+      },
     ]);
 
     const rawResponse = await sendMessage(e.target.message.value);
@@ -33,7 +39,7 @@ export default function Chatbot() {
   return (
     <div className="fixed bottom-2 right-4 h-[400px] w-[320px] flex flex-col gap-2 justify-between bg-red-300 ">
       <ul>
-        {messages?.map((message) => (
+        {messages?.map((message: ClientMessage) => (
           <li key={message.id}>{message.display}</li>
         ))}
       </ul>

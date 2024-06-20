@@ -1,7 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { CoreMessage, generateText, streamText } from "ai";
 import { createAI, createStreamableValue, getAIState } from "ai/rsc";
-import { ReactNode } from "react";
 
 export async function continueConversation(messages: CoreMessage[]) {
   "use server";
@@ -14,19 +13,13 @@ export async function continueConversation(messages: CoreMessage[]) {
   return stream.value;
 }
 
-export async function sendMessage(message: string) {
+export async function sendMessage(message: string): Promise<string> {
   "use server";
-  console.log("start sendMessage");
   const history = getAIState() as AIState;
-
-  console.log("got history : ", history);
-
   const response = await generateText({
     model: openai("gpt-3.5-turbo"),
     messages: [...history, { role: "user", content: message }],
   });
-
-  console.log("after response : ", response);
 
   return JSON.stringify(response);
 }
