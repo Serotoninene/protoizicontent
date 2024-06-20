@@ -2,7 +2,7 @@
 
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { useActions, useUIState } from "ai/rsc";
 import { AI, ClientMessage, UIState } from "@/app/actions/ai";
 
@@ -10,29 +10,35 @@ import { AI, ClientMessage, UIState } from "@/app/actions/ai";
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
+type ChatMessage = {
+  id: string;
+  role: "user" | "assistant";
+  display: string;
+};
+
 export default function Chatbot() {
   const { sendMessage } = useActions<typeof AI>();
-  const [messages, setMessages] = useUIState();
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    setMessages((prevMessages: UIState[]) => [
-      ...prevMessages,
-      {
-        id: Date.now(),
-        role: "user",
-        display: e.target.message.value,
-      },
-    ]);
+    const newMessage: ChatMessage = {
+      id: Date.now().toString(), // Convert Date.now() to string to match the 'id' type
+      role: "user",
+      display: (e.target as HTMLFormElement).message.value,
+    };
 
-    const rawResponse = await sendMessage(e.target.message.value);
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
 
+    const rawResponse = await sendMessage(
+      (e.target as HTMLFormElement).message.value,
+    );
     const response = JSON.parse(rawResponse);
 
     setMessages((prevMessages) => [
       ...prevMessages,
-      { id: Date.now(), role: "assistant", display: response.text },
+      { id: Date.now().toString(), role: "assistant", display: response.text },
     ]);
   };
 
