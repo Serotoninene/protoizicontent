@@ -43,8 +43,8 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-2 right-4 h-[400px] w-[320px] flex flex-col gap-2 justify-between bg-red-300 ">
-      <ul>
+    <div className="fixed bottom-2 right-4 h-[400px] w-[320px] flex flex-col gap-2 justify-between bg-red-300">
+      <ul className="overflow-y-scroll">
         {messages?.map((message: ClientMessage) => (
           <li key={message.id}>{message.display}</li>
         ))}

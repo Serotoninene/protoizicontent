@@ -5,7 +5,7 @@ import { createAI, createStreamableValue, getAIState } from "ai/rsc";
 export async function continueConversation(messages: CoreMessage[]) {
   "use server";
   const result = await streamText({
-    model: openai("gpt-3.5-turbo"),
+    model: openai("gpt-4-turbo"),
     messages,
   });
 
@@ -17,7 +17,7 @@ export async function sendMessage(message: string): Promise<string> {
   "use server";
   const history = getAIState() as AIState;
   const response = await generateText({
-    model: openai("gpt-3.5-turbo"),
+    model: openai("gpt-4-turbo"),
     messages: [...history, { role: "user", content: message }],
   });
 
