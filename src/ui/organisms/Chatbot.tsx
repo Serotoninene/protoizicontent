@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { type CoreMessage } from "ai";
 import { readStreamableValue } from "ai/rsc";
-import { continueConversation } from "@/app/actions/ai";
+import { sendMessage } from "@/app/actions/ai";
 
 // Force the page to be dynamic and allow streaming responses up to 30 seconds
 export const dynamic = "force-dynamic";
@@ -36,7 +36,7 @@ export default function Chatbot() {
           setMessages(newMessages);
           setInput("");
 
-          const result = await continueConversation(newMessages);
+          const result = await sendMessage(newMessages);
 
           for await (const content of readStreamableValue(result)) {
             setMessages([

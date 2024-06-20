@@ -3,6 +3,7 @@ import Navbar from "@/ui/molecules/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import { Inter } from "next/font/google";
+import { AI } from "./actions/ai";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,14 +23,16 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body
-          className={`font-sans ${inter.variable} text-primary-700 px-6 pt-7 max-w-[1077px] mx-auto`}
-        >
-          <Navbar />
-          {children}
-        </body>
-      </html>
+      <AI>
+        <html lang="en">
+          <body
+            className={`font-sans ${inter.variable} text-primary-700 px-6 pt-7 max-w-[1077px] mx-auto`}
+          >
+            <Navbar />
+            {children}
+          </body>
+        </html>
+      </AI>
     </ClerkProvider>
   );
 }
