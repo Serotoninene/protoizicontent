@@ -4,7 +4,7 @@
 
 import { AI } from "@/app/actions/ai";
 import { CoreMessage } from "ai";
-import { readStreamableValue, useActions } from "ai/rsc";
+import { readStreamableValue, useAIState, useActions } from "ai/rsc";
 import { useState } from "react";
 
 // Force the page to be dynamic and allow streaming responses up to 30 seconds
@@ -20,6 +20,7 @@ type ChatMessage = {
 // Using streaming text
 export default function Chatbot() {
   const aiActions = useActions<typeof AI>();
+  const [conversation, setConversation] = useAIState();
   const [messages, setMessages] = useState<CoreMessage[]>([]);
   const [input, setInput] = useState("");
 

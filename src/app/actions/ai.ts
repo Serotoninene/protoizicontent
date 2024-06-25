@@ -37,7 +37,7 @@ export async function continueConversation(messages: CoreMessage[]) {
     id: uuidv4(),
     conversationId: current_conversation,
     role: "user",
-    content: messages[messages.length - 1]!.content as string,
+    content: messages[messages.length - 1]!.content ?? ("OUPS" as string),
   });
 
   const result = await streamText({
@@ -73,7 +73,7 @@ export async function sendMessage(message: string): Promise<string> {
 
 // Define the AI state and UI state types
 export type ServerMessage = {
-  role: "user" | "assistant";
+  role: string;
   content: string;
 };
 
@@ -88,11 +88,23 @@ export type UIState = ClientMessage[];
 
 // Create the AI provider with the initial states and allowed actions
 export const AI = createAI<AIState, UIState>({
-  initialAIState: [],
-  initialUIState: [],
-  onSetAIState: async ({ state, done }) => {
+  onGetUIState: async () => {
     "use server";
-    console.log("AI state updated", state);
+
+    const historyFromDB: ServerMessage[] = await db.query.messages.findMany({
+      where: (messages, { eq }) => eq(messages.conversationId, "1"),
+      columns: {
+        role: true,
+        content: true,
+      },
+      orderBy: (messages, { asc }) => [asc(messages.timestamp)],
+    });
+
+    return historyFromDB.map(({ role, content }, id) => ({
+      id: id.toString(),
+      role,
+      display: content,
+    }));
   },
   actions: {
     sendMessage,
