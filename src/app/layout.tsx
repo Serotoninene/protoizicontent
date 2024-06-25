@@ -3,7 +3,7 @@ import Navbar from "@/ui/molecules/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import { Inter } from "next/font/google";
-import { AI } from "./actions/ai";
+import { AI } from "./actions/ai.tsx";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/server/db";
 

@@ -2,68 +2,57 @@
 
 "use client";
 
-import { AI } from "@/app/actions/ai";
-import { CoreMessage } from "ai";
-import { readStreamableValue, useAIState, useActions } from "ai/rsc";
+import { ClientMessage } from "@/app/actions/ai.tsx";
+import { generateId } from "ai";
+import { useActions, useUIState } from "ai/rsc";
 import { useState } from "react";
 
 // Force the page to be dynamic and allow streaming responses up to 30 seconds
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
-type ChatMessage = {
-  id: string;
-  role: "user" | "assistant";
-  display: string;
-};
-
 // Using streaming text
 export default function Chatbot() {
-  const aiActions = useActions<typeof AI>();
-  const [conversation, setConversation] = useAIState();
-  const [messages, setMessages] = useState<CoreMessage[]>([]);
-  const [input, setInput] = useState("");
-
-  const onSubmitAction = async () => {
-    const newMessages: CoreMessage[] = [
-      ...messages,
-      { content: input, role: "user" },
-    ];
-
-    setMessages(newMessages);
-    setInput("");
-
-    const result = await aiActions.continueConversation(newMessages);
-
-    for await (const content of readStreamableValue(result)) {
-      setMessages([
-        ...newMessages,
-        {
-          role: "assistant",
-          content: content as string,
-        },
-      ]);
-    }
-  };
+  const [input, setInput] = useState<string>("");
+  const [conversation, setConversation] = useUIState();
+  const { continueConversation } = useActions();
 
   return (
-    <div className="fixed bottom-2 right-4 h-[400px] w-[320px] flex flex-col gap-2 justify-between bg-red-300">
-      <ul className="overflow-y-scroll">
-        {messages?.map((message, id) => (
-          <li key={id}>{message.content as string}</li>
+    <div className="fixed bottom-0 right-4">
+      <div>
+        {conversation.map((message: ClientMessage) => (
+          <div key={message.id}>
+            {message.role}: {message.display}
+          </div>
         ))}
-      </ul>
+      </div>
 
-      <form action={onSubmitAction}>
+      <div>
         <input
           type="text"
-          name="message"
-          onChange={(e) => setInput(e.target.value)}
           value={input}
-          className=" w-full max-w-md p-2  border border-gray-300 rounded shadow-xl"
-          placeholder="Say something..."
+          onChange={(event) => {
+            setInput(event.target.value);
+          }}
         />
-      </form>
+        <button
+          onClick={async () => {
+            setConversation((currentConversation: ClientMessage[]) => [
+              ...currentConversation,
+              { id: generateId(), role: "user", display: input },
+            ]);
+
+            const message = await continueConversation(input);
+
+            setConversation((currentConversation: ClientMessage[]) => [
+              ...currentConversation,
+              message,
+            ]);
+          }}
+        >
+          Send Message
+        </button>
+      </div>
     </div>
   );
 }
