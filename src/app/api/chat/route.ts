@@ -38,11 +38,7 @@ export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
     const stream = result.toAIStream({
       async onFinal(data) {
         // Save the message to the database
-        await db.insert(messagesDb).values({
-          id: uuidv4() as string,
-          conversationId: conversation_id as string,
-          role: "assistant",
-          content: data,
+   
         });
 
         await dataStream.close();

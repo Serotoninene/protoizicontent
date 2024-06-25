@@ -19,7 +19,7 @@ type ChatMessage = {
 
 // Using streaming text
 export default function Chatbot() {
-  const { continueConversation } = useActions<typeof AI>();
+  const aiActions = useActions<typeof AI>();
   const [messages, setMessages] = useState<CoreMessage[]>([]);
   const [input, setInput] = useState("");
 
@@ -41,7 +41,7 @@ export default function Chatbot() {
           setMessages(newMessages);
           setInput("");
 
-          const result = await continueConversation(newMessages);
+          const result = await aiActions.continueConversation(newMessages);
 
           for await (const content of readStreamableValue(result)) {
             setMessages([
