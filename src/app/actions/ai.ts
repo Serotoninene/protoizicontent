@@ -26,10 +26,25 @@ export async function continueConversation(messages: CoreMessage[]) {
     });
   }
 
+  // FOR NOW USING THE FIRST CONVERSATION, WITH ID'S OF 1
+  const current_conversation =
+    user_conversations.length && user_conversations[0]!.id
+      ? user_conversations[0]!.id
+      : "1";
+
+  // saving the user's question
+  await db.insert(messagesDb).values({
+    id: uuidv4(),
+    conversationId: current_conversation,
+    role: "user",
+    content: messages[messages.length - 1]!.content as string,
+  });
+
   const result = await streamText({
     model: openai("gpt-4-turbo"),
     messages,
     async onFinish({ text }) {
+      // saving the ai answer
       await db.insert(messagesDb).values({
         id: uuidv4(),
         conversationId:

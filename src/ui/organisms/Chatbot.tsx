@@ -23,6 +23,28 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<CoreMessage[]>([]);
   const [input, setInput] = useState("");
 
+  const onSubmitAction = async () => {
+    const newMessages: CoreMessage[] = [
+      ...messages,
+      { content: input, role: "user" },
+    ];
+
+    setMessages(newMessages);
+    setInput("");
+
+    const result = await aiActions.continueConversation(newMessages);
+
+    for await (const content of readStreamableValue(result)) {
+      setMessages([
+        ...newMessages,
+        {
+          role: "assistant",
+          content: content as string,
+        },
+      ]);
+    }
+  };
+
   return (
     <div className="fixed bottom-2 right-4 h-[400px] w-[320px] flex flex-col gap-2 justify-between bg-red-300">
       <ul className="overflow-y-scroll">
@@ -31,29 +53,7 @@ export default function Chatbot() {
         ))}
       </ul>
 
-      <form
-        action={async () => {
-          const newMessages: CoreMessage[] = [
-            ...messages,
-            { content: input, role: "user" },
-          ];
-
-          setMessages(newMessages);
-          setInput("");
-
-          const result = await aiActions.continueConversation(newMessages);
-
-          for await (const content of readStreamableValue(result)) {
-            setMessages([
-              ...newMessages,
-              {
-                role: "assistant",
-                content: content as string,
-              },
-            ]);
-          }
-        }}
-      >
+      <form action={onSubmitAction}>
         <input
           type="text"
           name="message"
