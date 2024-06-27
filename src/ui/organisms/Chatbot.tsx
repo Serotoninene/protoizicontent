@@ -2,7 +2,7 @@
 
 "use client";
 
-import { ClientMessage } from "@/app/actions/ai.tsx";
+import { ClientMessage } from "@/app/actions/ai";
 import { generateId } from "ai";
 import { useActions, useUIState } from "ai/rsc";
 import { useState } from "react";
@@ -18,7 +18,7 @@ export default function Chatbot() {
   const { continueConversation } = useActions();
 
   return (
-    <div className="fixed flex flex-col  bottom-0 w-[360px] h-[420px] right-4">
+    <div className="fixed flex flex-col justify-between bottom-0 w-[360px] h-[420px] right-4">
       <div className="overflow-y-scroll">
         {conversation.map((message: ClientMessage) => (
           <div key={message.id}>

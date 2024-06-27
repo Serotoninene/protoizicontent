@@ -23,7 +23,7 @@ What i want is just to be able to click a button and receive ten images with
 [X] add the product ID from stripe to the tier table and call it in the buy server action
 [X] when login, give a chat gpt conversation id to the user
 [X] save the messages history for each conversation
-[] change conversation for each user login in
+[X] change conversation for each user login in
 [] when switch plan, delete previous plan before adding the new one
 [] limit access to video creation in function of the role
 [] generate the production stripe keys (all the env variables but also the products api)
