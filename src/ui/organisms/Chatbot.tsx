@@ -18,8 +18,8 @@ export default function Chatbot() {
   const { continueConversation } = useActions();
 
   return (
-    <div className="fixed bottom-0 right-4">
-      <div>
+    <div className="fixed flex flex-col  bottom-0 w-[360px] h-[420px] right-4">
+      <div className="overflow-y-scroll">
         {conversation.map((message: ClientMessage) => (
           <div key={message.id}>
             {message.role}: {message.display}

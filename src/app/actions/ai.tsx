@@ -2,8 +2,10 @@
 "use server";
 
 import { db } from "@/server/db";
+import { getConversationOnInit } from "@/server/db/routes/conversation";
 import { messages } from "@/server/db/schema";
 import { openai } from "@ai-sdk/openai";
+import { currentUser } from "@clerk/nextjs/server";
 import { generateId } from "ai";
 import { createAI, getAIState, getMutableAIState, streamUI } from "ai/rsc";
 import { ReactNode } from "react";
@@ -15,7 +17,7 @@ export interface ServerMessage {
 
 export interface ClientMessage {
   id: string;
-  role: string; //"user" | "assistant" | "function";
+  role: string; // "user" | "assistant" | "function";
   display: ReactNode;
 }
 
@@ -55,13 +57,15 @@ export const AI = createAI<ServerMessage[], ClientMessage[]>({
   },
   onSetAIState: async ({ state, done }) => {
     "use server";
+    const user = await currentUser();
+    const conversation = await getConversationOnInit(user!.id);
 
     if (done) {
       for (let i = state.length - 2; i < state.length; i++) {
         // saving the user's prompt and the ai answer in the db
         await db.insert(messages).values({
           id: generateId(),
-          conversationId: "1",
+          conversationId: conversation!.id,
           role: state[i]?.role as "assistant" | "user",
           content: state[i]?.content ?? "",
         });
@@ -72,6 +76,7 @@ export const AI = createAI<ServerMessage[], ClientMessage[]>({
     "use server";
     // @ts-expect-error - This is a server-side function
     const history: ServerMessage[] = getAIState();
+
     return history.map(({ role, content }) => ({
       id: generateId(),
       role,
