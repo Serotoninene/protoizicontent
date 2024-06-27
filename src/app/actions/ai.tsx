@@ -37,7 +37,7 @@ export async function continueConversation(
         ]);
       }
 
-      return <div>{content}</div>;
+      return <div className="bg-red-400">{content}</div>;
     },
   });
 
