@@ -1,11 +1,10 @@
 import "@/styles/globals.css";
-import { db } from "@/server/db";
-import { conversations } from "@/server/db/schema";
 import { AI, type ServerMessage } from "./actions/ai";
+import { getChatHistory } from "@/server/db/routes/messages";
+import { getConversationOnInit } from "@/server/db/routes/conversation";
 
 import Navbar from "@/ui/molecules/Navbar";
 
-import { v4 as uuid } from "uuid";
 import { ClerkProvider } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 
@@ -26,13 +25,6 @@ function Providers({ children }: { children: React.ReactNode }) {
   return <ClerkProvider>{children}</ClerkProvider>;
 }
 
-type Conversation = {
-  id: string;
-  userId: string;
-  moodId: string;
-  createdAt: Date | null;
-};
-
 export default async function RootLayout({
   children,
 }: {
@@ -41,38 +33,10 @@ export default async function RootLayout({
   // Fetch the current user and their message history
   const user = await currentUser();
   let history: ServerMessage[] = [];
-  let conversation: Conversation | undefined;
 
-  if (!user?.id) {
-  } else {
-    conversation = await db.query.conversations.findFirst({
-      where: (conversations, { eq }) => eq(conversations.userId, user.id),
-    });
-
-    if (!conversation) {
-      console.log("no conversation");
-
-      const newConversation = await db
-        .insert(conversations)
-        .values({
-          id: uuid(),
-          userId: user.id,
-        })
-        .returning();
-
-      conversation = newConversation[0];
-    }
-
-    if (conversation?.id) {
-      history = await db.query.messages.findMany({
-        where: (messages, { eq }) =>
-          eq(messages.conversationId, conversation!.id),
-        columns: {
-          role: true,
-          content: true,
-        },
-      });
-    }
+  if (user?.id) {
+    const conversation = await getConversationOnInit(user.id);
+    if (conversation?.id) history = await getChatHistory(conversation.id);
   }
 
   return (
