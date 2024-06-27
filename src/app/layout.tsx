@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
-import { AI, type ServerMessage } from "./actions/ai";
+import { type ServerMessage } from "./actions/ai";
+import { AI } from "./actions/AI.1";
 import { getChatHistory } from "@/server/db/routes/messages";
 import { getConversationOnInit } from "@/server/db/routes/conversation";
 
