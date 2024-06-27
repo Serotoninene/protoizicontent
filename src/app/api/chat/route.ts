@@ -5,11 +5,9 @@ import {
   streamText,
   type CoreMessage,
 } from "ai";
-import { v4 as uuidv4 } from "uuid";
 
-import { NextResponse, type NextRequest } from "next/server";
 import { db } from "@/server/db";
-import { messages as messagesDb } from "@/server/db/schema";
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
   try {
@@ -36,10 +34,8 @@ export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
     dataStream.append({ previousMessages: JSON.stringify(initialMessages) });
 
     const stream = result.toAIStream({
-      async onFinal(data) {
+      async onFinal() {
         // Save the message to the database
-   
-        });
 
         await dataStream.close();
       },
