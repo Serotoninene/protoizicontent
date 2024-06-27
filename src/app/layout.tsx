@@ -1,11 +1,12 @@
 import "@/styles/globals.css";
+import { db } from "@/server/db";
+import { AI, type ServerMessage } from "./actions/ai";
 import Navbar from "@/ui/molecules/Navbar";
+
 import { ClerkProvider } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 
 import { Inter } from "next/font/google";
-import { AI } from "./actions/ai.tsx";
-import { currentUser } from "@clerk/nextjs/server";
-import { db } from "@/server/db";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,10 +28,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Fetch the current user and their message history
   const user = await currentUser();
-  let history = [];
+  let history: ServerMessage[] = [];
 
   if (user) {
+    // TO DO, DON'T GET THE DEFAULT CONVERSATION BUT TAKE THE SPECIFIC CONVERSATION ID THAT FITS WITH THE USER
     history = await db.query.messages.findMany({
       where: (messages, { eq }) => eq(messages.conversationId, "1"),
       columns: {

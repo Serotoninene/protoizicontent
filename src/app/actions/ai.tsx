@@ -8,7 +8,7 @@ import { createAI, getAIState, getMutableAIState, streamUI } from "ai/rsc";
 import { ReactNode } from "react";
 
 export interface ServerMessage {
-  role: "user" | "assistant" | "function";
+  role: string; // "user" | "assistant" | "function";
   content: string;
 }
 
