@@ -3,6 +3,7 @@
 "use client";
 
 import { ClientMessage } from "@/app/actions/ai";
+import { useUser } from "@clerk/nextjs";
 import { generateId } from "ai";
 import { useActions, useUIState } from "ai/rsc";
 import { useState } from "react";
@@ -13,9 +14,12 @@ export const maxDuration = 30;
 
 // Using streaming text
 export default function Chatbot() {
+  const { isSignedIn } = useUser();
   const [input, setInput] = useState<string>("");
   const [conversation, setConversation] = useUIState();
   const { continueConversation } = useActions();
+
+  if (!isSignedIn) return;
 
   return (
     <div className="fixed flex flex-col justify-between bottom-0 w-[360px] h-[420px] right-4">
