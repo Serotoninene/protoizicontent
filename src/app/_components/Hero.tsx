@@ -47,7 +47,7 @@ function GradientBackground() {
 
 export default function Hero() {
   return (
-    <div className="relative isolate px-6 lg:px-8 h-[calc(100vh-150px)] flex items-center z-0">
+    <div className="relative isolate px-6 lg:px-8 h-[calc(100vh-150px)] flex items-center z-0 mt-[76px]">
       <GradientBackground />
       <div className="mx-auto max-w-2xl text-center">
         <h1 className="text-4xl font-bold tracking-tight text-primary-900 sm:text-6xl">
