@@ -44,7 +44,7 @@ const AuthButtons = async () => {
 export default function Navbar() {
   return (
     <nav
-      className="flex items-center justify-between p-6 lg:px-8 z-50"
+      className="fixed top-0 left-0 right-0 flex items-center justify-between p-6 lg:px-8 z-50"
       aria-label="Global"
     >
       <div className="flex items-start">

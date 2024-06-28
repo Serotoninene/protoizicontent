@@ -63,11 +63,14 @@ function classNames(...classes: string[]) {
 }
 
 const BuyButton = ({ tier }: { tier: Tier }) => {
+  const test = "énorme !";
+
   const handleSwitchPlan = async () => {
     "use server";
+
+    console.log(test);
     const session = await currentUser();
 
-    // to do : if no user redirect to the login
     if (!session) {
       auth().redirectToSignIn();
       return;

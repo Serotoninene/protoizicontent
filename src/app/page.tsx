@@ -18,7 +18,7 @@ export default async function HomePage() {
       <Pricing />
       <CTASection />
       <Footer />
-      <Chatbot />
+      {/* <Chatbot /> */}
     </main>
   );
 }
