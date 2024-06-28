@@ -3,6 +3,7 @@ import { CheckIcon } from "@heroicons/react/20/solid";
 import { db } from "@/server/db";
 import stripe from "@/server/lib/stripe";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { users } from "@/server/db/schema";
 
 type Tier = {
   name: string;
@@ -63,12 +64,9 @@ function classNames(...classes: string[]) {
 }
 
 const BuyButton = ({ tier }: { tier: Tier }) => {
-  const test = "énorme !";
-
   const handleSwitchPlan = async () => {
     "use server";
 
-    console.log(test);
     const session = await currentUser();
 
     if (!session) {
