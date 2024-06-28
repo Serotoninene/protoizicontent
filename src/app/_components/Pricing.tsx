@@ -93,7 +93,7 @@ const BuyButton = ({ tier }: { tier: Tier }) => {
       ],
       success_url:
         process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/success"
+          ? "http://localhost:3000/"
           : `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
       cancel_url:
         process.env.NODE_ENV === "development"
