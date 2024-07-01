@@ -1,9 +1,8 @@
-import { redirect } from "next/navigation";
-import { CheckIcon } from "@heroicons/react/20/solid";
 import { db } from "@/server/db";
 import stripe from "@/server/lib/stripe";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { users } from "@/server/db/schema";
+import { CheckIcon } from "@heroicons/react/20/solid";
+import { redirect } from "next/navigation";
 
 type Tier = {
   name: string;
