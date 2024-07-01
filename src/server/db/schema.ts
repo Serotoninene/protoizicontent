@@ -18,16 +18,22 @@ export const createTable = pgTableCreator((name) => `protoIzyContent_${name}`);
 export const users = createTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   role: varchar("role", { length: 255 }).notNull().default("USER"),
-  tierId: varchar("tierId", { length: 255 }).notNull().default("1"),
   firstName: varchar("firstName", { length: 255 }),
   lastName: varchar("lastName", { length: 255 }),
+  image: varchar("image", { length: 255 }),
   email: varchar("email", { length: 255 }),
-  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }).notNull(),
   phone: varchar("phone", { length: 255 }),
   emailVerified: timestamp("emailVerified", {
     mode: "date",
   }).default(sql`CURRENT_TIMESTAMP`),
-  image: varchar("image", { length: 255 }),
+  videoCount: numeric("videoCount", {
+    precision: 4,
+    scale: 0,
+  })
+    .notNull()
+    .default("0"),
+  tierId: varchar("tierId", { length: 255 }).notNull().default("1"),
+  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }).notNull(),
 });
 
 export const tiers = createTable("tier", {

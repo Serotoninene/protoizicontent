@@ -18,7 +18,6 @@ export const createConversation = async (userId: string) => {
       userId: userId,
     })
     .returning();
-
   return newConversation[0];
 };
 
