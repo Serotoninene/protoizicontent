@@ -49,9 +49,8 @@ export async function handleSubscriptions(tier: Tier) {
 
     return;
   } else if (userSubscriptions.data.length > 0 && tier.id === "1") {
-    // if the user already has a subscription and wants out of it
-    // Log a message if the user is trying to subscribe to the base tier but already has a subscription
-    console.log("Need to delete the subscription");
+    // if the user already has a subscription and wants out of it cancel the subscription
+    await stripe.subscriptions.cancel(userSubscriptions.data[0]!.id);
     return;
   }
 

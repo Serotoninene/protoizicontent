@@ -18,23 +18,18 @@ export async function getTierByProductId(productId: string) {
 
 export async function updateTierByCustomerId(
   customerId: string,
-  productId: string,
+  productId?: string,
 ) {
   try {
     // Get the corresponding tier
-    if (!productId) throw new Error("no product id");
     if (!customerId) throw new Error("no customer id");
-
-    const tier = await db.query.tiers.findFirst({
-      where: (tiers, { eq }) => eq(tiers.productId, productId),
-    });
-
-    if (!tier) throw new Error("no update tier id");
+    let tier;
+    if (productId) tier = await getTierByProductId(productId);
 
     await db
       .update(users)
       .set({
-        tierId: tier.id,
+        tierId: productId ? tier?.id : "1",
       })
       .where(eq(users.stripeCustomerId, customerId));
   } catch (e) {

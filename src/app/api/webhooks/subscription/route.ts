@@ -42,7 +42,12 @@ export async function POST(req: NextRequest) {
 
       break;
     case "customer.subscription.deleted":
-      console.log("Subscription deleted");
+      data = event.data.object;
+      customerId = data.customer;
+
+      if (customerId) {
+        await updateTierByCustomerId(customerId as string);
+      }
 
       break;
     case "invoice.payment_succeeded":
