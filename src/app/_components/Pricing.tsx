@@ -81,6 +81,15 @@ const BuyButton = ({ tier }: { tier: Tier }) => {
     if (!user) throw new Error("User not found");
     if (!user.stripeCustomerId) throw new Error("Stripe customer not found");
 
+    const userSubscriptions = await stripe.subscriptions.list({
+      customer: user.stripeCustomerId,
+    });
+
+    // using the stripeCustomerId, if the user already has a subscription
+    if (userSubscriptions.data.length > 0) {
+      return;
+    }
+
     const stripeSession = await stripe.checkout.sessions.create({
       mode: "subscription",
       payment_method_types: ["card", "paypal", "link"],
