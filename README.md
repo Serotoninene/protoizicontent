@@ -25,9 +25,10 @@ What i want is just to be able to click a button and receive ten images with
 [X] save the messages history for each conversation
 [X] change conversation for each user login in
 [X] setup the webhook listening
+[X] [database] update the db tier when switching plan
+[X] [stripe] instead of creating subscription everytime, if already subscription, hit update rather than create
+[] handle the delete subscription part, when clicking on free tier button
 [] add the correct webhook secret to vercel's env variables
-[] [database] update the db tier when switching plan
-[] [stripe] instead of creating subscription everytime, if already subscription, hit update rather than create
 [] limit access to video creation in function of the role
 [] generate the production stripe keys (all the env variables but also the products api)
 [] set up the project
