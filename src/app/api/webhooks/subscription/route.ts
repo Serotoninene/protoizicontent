@@ -7,6 +7,8 @@ import stripe from "@/server/lib/stripe";
 
 import { NextRequest, NextResponse } from "next/server";
 
+const updateUserTier = (userId) => {};
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("Stripe-Signature");
@@ -32,7 +34,29 @@ export async function POST(req: NextRequest) {
       // Get the subscription from the event
       break;
     case "customer.subscription.updated":
-      console.log("Subscription updated");
+      // update the tier in the db
+      const updateData = event.data.object;
+      const updateCustomerId = updateData.customer;
+      const updateProductId = updateData.items.data[0]?.plan.id;
+
+      // Get the corresponding tier
+      const updateTier = await db.query.tiers.findFirst({
+        where: (tiers, { eq }) => eq(tiers.productId, updateProductId!),
+      });
+
+      try {
+        if (!updateTier) throw new Error("no update tier id");
+
+        await db
+          .update(users)
+          .set({
+            tierId: updateTier.id,
+          })
+          .where(eq(users.stripeCustomerId, updateCustomerId as string));
+      } catch (e) {
+        console.log("error updating the tier in db : ", e);
+      }
+
       break;
     case "customer.subscription.deleted":
       console.log("Subscription deleted");
