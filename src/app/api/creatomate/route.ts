@@ -1,6 +1,6 @@
 // api/creatomate/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest, NextResponse } from "next/server";
 
 interface RequestBody {
   text1: string;
@@ -8,7 +8,7 @@ interface RequestBody {
   text3?: string;
 }
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   const url = " https://api.creatomate.com/v1/renders";
   const { text1, text2, text3 } = (await req.json()) as RequestBody;
 
