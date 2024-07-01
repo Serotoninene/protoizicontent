@@ -1,18 +1,8 @@
 import { db } from "@/server/db";
-import stripe from "@/server/lib/stripe";
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { CheckIcon } from "@heroicons/react/20/solid";
-import { redirect } from "next/navigation";
+import { handleSubscriptions } from "../actions/stripe";
 
-type Tier = {
-  name: string;
-  id: string;
-  priceMonthly: string;
-  description: string;
-  features: string[];
-  mostPopular: boolean;
-  productId?: string;
-};
+import type { Tier } from "types";
 
 const tiers: Tier[] = [
   {
@@ -63,72 +53,14 @@ function classNames(...classes: string[]) {
 }
 
 const BuyButton = ({ tier }: { tier: Tier }) => {
-  const handleSwitchPlan = async () => {
-    "use server";
-
-    const session = await currentUser();
-
-    if (!session) {
-      auth().redirectToSignIn();
-      return;
-    }
-
-    const user = await db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.id, session.id),
-    });
-
-    if (!user) throw new Error("User not found");
-    if (!user.stripeCustomerId) throw new Error("Stripe customer not found");
-
-    const userSubscriptions = await stripe.subscriptions.list({
-      customer: user.stripeCustomerId,
-    });
-
-    // using the stripeCustomerId, if the user already has a subscription
-    if (userSubscriptions.data.length > 0) {
-      const prevItems = userSubscriptions.data[0]!.items.data;
-
-      // Get previous subscriptions to delete them before adding the new one
-      const itemsParams = prevItems.map((item) => ({
-        id: item.id,
-        deleted: true,
-      }));
-
-      await stripe.subscriptions.update(userSubscriptions.data[0]!.id, {
-        items: [...itemsParams, { price: tier.productId, quantity: 1 }],
-      });
-
-      return;
-    }
-
-    if (process.env.NEXT_PUBLIC_DEBUG === "true") return;
-
-    const stripeSession = await stripe.checkout.sessions.create({
-      mode: "subscription",
-      payment_method_types: ["card", "paypal", "link"],
-      customer: user.stripeCustomerId,
-      line_items: [
-        {
-          price: tier.productId,
-          quantity: 1,
-        },
-      ],
-      success_url:
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/"
-          : `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
-      cancel_url:
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/"
-          : `${process.env.NEXT_PUBLIC_BASE_URL}/`,
-    });
-
-    if (!stripeSession.url) throw new Error("Stripe session not found");
-    redirect(stripeSession.url);
-  };
-
   return (
-    <form action={handleSwitchPlan} className="flex justify-center">
+    <form
+      action={async () => {
+        "use server";
+        await handleSubscriptions(tier);
+      }}
+      className="flex justify-center"
+    >
       <button
         className={classNames(
           tier.mostPopular

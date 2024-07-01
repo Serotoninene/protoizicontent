@@ -1,4 +1,4 @@
-# PROTOTYPE IZYCONTENT.COM
+# PROTOTYPE BUZZCLIP.COM
 
 <!-- so this is just a prototype so i want to focus on the main feature.
 What i want is just to be able to click a button and receive ten images with
