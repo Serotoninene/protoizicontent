@@ -29,6 +29,7 @@ What i want is just to be able to click a button and receive ten images with
 [X] [stripe] instead of creating subscription everytime, if already subscription, hit update rather than create
 [X] handle the delete subscription part, when clicking on free tier button
 [X] add the correct webhook secret to vercel's env variables
+[X] add a videoCount to the user table
 [] limit access to video creation in function of the role
 [] generate the production stripe keys (all the env variables but also the products api)
 [] set up the project
