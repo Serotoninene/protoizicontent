@@ -1,13 +1,8 @@
-import Stripe from "stripe";
-
-import { db } from "@/server/db";
-import { eq } from "drizzle-orm";
-import { users } from "@/server/db/schema";
+import type Stripe from "stripe";
 import stripe from "@/server/lib/stripe";
-
 import { NextRequest, NextResponse } from "next/server";
 
-const updateUserTier = (userId) => {};
+import { updateTierByCustomerId } from "@/server/db/routes/tier";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -27,6 +22,9 @@ export async function POST(req: NextRequest) {
   }
 
   const eventType = event.type;
+  let data;
+  let customerId;
+  let productId: string | undefined;
 
   switch (eventType) {
     case "customer.subscription.created":
@@ -34,27 +32,12 @@ export async function POST(req: NextRequest) {
       // Get the subscription from the event
       break;
     case "customer.subscription.updated":
-      // update the tier in the db
-      const updateData = event.data.object;
-      const updateCustomerId = updateData.customer;
-      const updateProductId = updateData.items.data[0]?.plan.id;
+      data = event.data.object;
+      customerId = data.customer;
+      productId = data.items.data[0]?.plan.id;
 
-      // Get the corresponding tier
-      const updateTier = await db.query.tiers.findFirst({
-        where: (tiers, { eq }) => eq(tiers.productId, updateProductId!),
-      });
-
-      try {
-        if (!updateTier) throw new Error("no update tier id");
-
-        await db
-          .update(users)
-          .set({
-            tierId: updateTier.id,
-          })
-          .where(eq(users.stripeCustomerId, updateCustomerId as string));
-      } catch (e) {
-        console.log("error updating the tier in db : ", e);
+      if (customerId && productId) {
+        await updateTierByCustomerId(customerId as string, productId);
       }
 
       break;
@@ -63,25 +46,12 @@ export async function POST(req: NextRequest) {
 
       break;
     case "invoice.payment_succeeded":
-      const invoice = event.data.object;
-      const customerId = invoice.customer;
-      const productId = invoice.lines.data[0]?.plan?.id;
+      data = event.data.object;
+      customerId = data.customer;
+      productId = data.lines.data[0]?.plan?.id;
 
-      // Get the corresponding tier
-      const tier = await db.query.tiers.findFirst({
-        where: (tiers, { eq }) => eq(tiers.productId, productId!),
-      });
-
-      try {
-        // Get the current user
-        await db
-          .update(users)
-          .set({
-            tierId: tier?.id,
-          })
-          .where(eq(users.stripeCustomerId, customerId as string));
-      } catch (e) {
-        console.log(e);
+      if (customerId && productId) {
+        await updateTierByCustomerId(customerId as string, productId);
       }
 
       break;

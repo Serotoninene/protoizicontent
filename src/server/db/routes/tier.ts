@@ -16,21 +16,28 @@ export async function getTierByProductId(productId: string) {
   }
 }
 
-export async function updateUserTier(
+export async function updateTierByCustomerId(
   customerId: string,
-  tierId: string | null,
+  productId: string,
 ) {
   try {
-    if (!tierId) throw new Error("No tier Id");
+    // Get the corresponding tier
+    if (!productId) throw new Error("no product id");
+    if (!customerId) throw new Error("no customer id");
+
+    const tier = await db.query.tiers.findFirst({
+      where: (tiers, { eq }) => eq(tiers.productId, productId),
+    });
+
+    if (!tier) throw new Error("no update tier id");
 
     await db
       .update(users)
       .set({
-        tierId: tierId,
+        tierId: tier.id,
       })
       .where(eq(users.stripeCustomerId, customerId));
   } catch (e) {
-    console.log("Error updating user tier in DB: ", e);
-    throw e;
+    console.log("error updating the tier in db : ", e);
   }
 }
