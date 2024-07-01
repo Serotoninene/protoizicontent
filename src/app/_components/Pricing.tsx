@@ -87,8 +87,22 @@ const BuyButton = ({ tier }: { tier: Tier }) => {
 
     // using the stripeCustomerId, if the user already has a subscription
     if (userSubscriptions.data.length > 0) {
+      const prevItems = userSubscriptions.data[0]!.items.data;
+
+      // Get previous subscriptions to delete them before adding the new one
+      const itemsParams = prevItems.map((item) => ({
+        id: item.id,
+        deleted: true,
+      }));
+
+      await stripe.subscriptions.update(userSubscriptions.data[0]!.id, {
+        items: [...itemsParams, { price: tier.productId, quantity: 1 }],
+      });
+
       return;
     }
+
+    if (process.env.NEXT_PUBLIC_DEBUG === "true") return;
 
     const stripeSession = await stripe.checkout.sessions.create({
       mode: "subscription",
