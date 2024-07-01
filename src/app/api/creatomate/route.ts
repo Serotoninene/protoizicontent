@@ -1,5 +1,3 @@
-// api/creatomate/route.ts
-
 import type { NextRequest, NextResponse } from "next/server";
 
 interface RequestBody {
