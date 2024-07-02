@@ -30,7 +30,18 @@ What i want is just to be able to click a button and receive ten images with
 [X] handle the delete subscription part, when clicking on free tier button
 [X] add the correct webhook secret to vercel's env variables
 [X] add a videoCount to the user table
+[] design a dashboard
+[] code it
 [] limit access to video creation in function of the role
 [] generate the production stripe keys (all the env variables but also the products api)
 [] set up the project
+-->
+
+<!-- BUZZ CLIP MILESTONES
+MAIN FEATURE : GENERATE VIDEOS WITH AI
+SECONDLY FEATURE BY ORDER OF IMPORTANCE :
+- Calendar to know when to post
+- Automatic posting
+- Changing the videos as well as the text
+- Finetune videos according to subject
 -->
