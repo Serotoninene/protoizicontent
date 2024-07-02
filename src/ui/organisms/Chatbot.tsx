@@ -2,7 +2,7 @@
 
 "use client";
 
-import { ClientMessage } from "@/app/actions/ai";
+import { ClientMessage } from "@/server/actions/ai";
 import { useUser } from "@clerk/nextjs";
 import { generateId } from "ai";
 import { useActions, useUIState } from "ai/rsc";

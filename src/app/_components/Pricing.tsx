@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
 import { CheckIcon } from "@heroicons/react/20/solid";
-import { handleSubscriptions } from "../actions/stripe";
+import { handleSubscriptions } from "../../server/actions/stripe";
 
 import type { Tier } from "types";
 

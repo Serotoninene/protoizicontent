@@ -4,9 +4,9 @@ import CTASection from "./_components/CTASection";
 import Content from "./_components/Content";
 import Hero from "./_components/Hero";
 import Pricing from "./_components/Pricing";
+import Chatbot from "@/ui/organisms/Chatbot";
 
 // Ui components
-import Chatbot from "@/ui/organisms/Chatbot";
 
 // Packages
 
