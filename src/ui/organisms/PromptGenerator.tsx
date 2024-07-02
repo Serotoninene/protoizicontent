@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import type { NextResponse } from "next/server";
+import { useEffect, useState } from "react";
 import PromptButton from "../molecules/PromptButton";
 
-import type { CoreMessage, Message } from "ai";
+import type { Message } from "ai";
 
 type Conversation = {
   id: string;
@@ -70,7 +70,7 @@ export default function PromptGenerator({ conversation }: Props) {
         <input type="number" onChange={(e) => setPromptNb(e.target.value)} />
         <PromptButton
           initialMessages={initialMessages}
-          conversationId={conversation.id}
+          conversationId={conversation?.id}
           prompt={`what is the last quote you gave me ?`}
           setPrompts={setPrompts}
         />
