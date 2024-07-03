@@ -1,9 +1,10 @@
 "use client";
 
-import { useIsExtendedContext } from "@/context/isExtendedContext";
 import Link from "next/link";
+import type { ElementType } from "react";
 import { usePathname } from "next/navigation";
-import { ElementType } from "react";
+
+import { useIsExtendedContext } from "@/context/isExtendedContext";
 
 type Props = {
   children: React.ReactNode;
