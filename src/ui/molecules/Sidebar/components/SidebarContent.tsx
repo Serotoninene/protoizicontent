@@ -1,20 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { SparklesIcon } from "@heroicons/react/24/solid";
+import {
+  CalendarIcon,
+  SparklesIcon,
+  Squares2X2Icon,
+} from "@heroicons/react/24/solid";
 
 import Logo from "@/ui/atoms/Logo";
 import SidebarLink from "./SidebarLink";
+import { UserButton } from "@clerk/nextjs";
 import { useIsExtendedContext } from "@/context/isExtendedContext";
 
 // type Props = {};
 
-export default function SidebarContent() {
+export function SidebarHeader() {
   const { setIsExtended } = useIsExtendedContext();
 
   const handleExtend = () => {
     // todo : only set is extended at the end of a FLIP animation
-    setIsExtended(true);
+    // setIsExtended(true);
   };
 
   const handleContract = () => {
@@ -37,7 +42,20 @@ export default function SidebarContent() {
       </Link>
       <div className="h-[0.5px] w-full bg-primary-200" />
 
-      <SidebarLink href="/dashboard">Dashboard</SidebarLink>
+      <SidebarLink href="/dashboard" icon={Squares2X2Icon}>
+        Dashboard
+      </SidebarLink>
+      <SidebarLink href="/dashboard" icon={CalendarIcon}>
+        Calendar
+      </SidebarLink>
+    </div>
+  );
+}
+
+export function SidebarFooter() {
+  return (
+    <div className="mx-auto">
+      <UserButton />
     </div>
   );
 }
