@@ -1,9 +1,13 @@
 import { db } from "@/server/db";
 import { createUser } from "@/server/db/routes/user";
-import { SignInButton, UserButton } from "@clerk/nextjs";
+
 import { currentUser } from "@clerk/nextjs/server";
+import { SignInButton, UserButton } from "@clerk/nextjs";
+
 import Link from "next/link";
 import PrimaryButton from "../atoms/PrimaryButton";
+import SecondaryButton from "../atoms/SecondaryButton";
+import { SparklesIcon } from "@heroicons/react/24/solid";
 
 const AuthButtons = async () => {
   const user = await currentUser();
@@ -26,7 +30,19 @@ const AuthButtons = async () => {
       await createUser(newUser);
     }
 
-    return <UserButton />;
+    return (
+      <div className="flex gap-6">
+        <Link href="/generate">
+          <SecondaryButton>
+            <div className="flex items-center gap-2">
+              <p>Generate</p>
+              <SparklesIcon className="w-4 h-4" />
+            </div>
+          </SecondaryButton>
+        </Link>
+        <UserButton />
+      </div>
+    );
   }
 
   return (
@@ -52,7 +68,7 @@ export default function Navbar() {
           BuzzClip
         </Link>
       </div>
-      <div className="flex  gap-10">
+      <div className="flex gap-10">
         <AuthButtons />
       </div>
     </nav>
