@@ -1,3 +1,3 @@
 export default function Generate() {
-  return <div>Hello generate</div>;
+  return <div>Hello generate yooo</div>;
 }

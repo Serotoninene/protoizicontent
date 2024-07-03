@@ -8,6 +8,7 @@ import Link from "next/link";
 import PrimaryButton from "../atoms/PrimaryButton";
 import SecondaryButton from "../atoms/SecondaryButton";
 import { SparklesIcon } from "@heroicons/react/24/solid";
+import Logo from "../atoms/Logo";
 
 const AuthButtons = async () => {
   const user = await currentUser();
@@ -64,9 +65,7 @@ export default function Navbar() {
       aria-label="Global"
     >
       <div className="flex items-start">
-        <Link href="/" className="-m-1.5 p-1.5 font-bold text-xl">
-          BuzzClip
-        </Link>
+        <Logo isExtended={true} />
       </div>
       <div className="flex gap-10">
         <AuthButtons />

@@ -1,4 +1,4 @@
-import Sidebar from "@/ui/molecules/SideBar";
+import Sidebar from "@/ui/molecules/Sidebar";
 
 export default function Layoot({ children }: { children: React.ReactNode }) {
   return (
