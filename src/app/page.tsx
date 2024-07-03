@@ -5,6 +5,7 @@ import Content from "./_components/Content";
 import Hero from "./_components/Hero";
 import Pricing from "./_components/Pricing";
 import Chatbot from "@/ui/organisms/Chatbot";
+import Navbar from "@/ui/molecules/Navbar";
 
 // Ui components
 
@@ -13,6 +14,7 @@ import Chatbot from "@/ui/organisms/Chatbot";
 export default async function HomePage() {
   return (
     <main className="relative min-h-screen h-screen z-0">
+      <Navbar />
       <Hero />
       <Content />
       <Pricing />

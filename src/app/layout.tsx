@@ -1,10 +1,8 @@
 import "@/styles/globals.css";
 import { AI, type ServerMessage } from "../server/actions/ai";
 
-import { getChatHistory } from "@/server/db/routes/messages";
 import { getConversationOnInit } from "@/server/db/routes/conversation";
-
-import Navbar from "@/ui/molecules/Navbar";
+import { getChatHistory } from "@/server/db/routes/messages";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
@@ -47,7 +45,6 @@ export default async function RootLayout({
           <body
             className={`font-sans ${inter.variable} text-primary-700 px-6 pt-7 max-w-[1077px] mx-auto`}
           >
-            <Navbar />
             {children}
           </body>
         </html>
