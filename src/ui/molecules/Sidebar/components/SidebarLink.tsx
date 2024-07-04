@@ -12,7 +12,11 @@ type Props = {
   href: string;
 };
 
-export default function SidebarLink({ icon: Icon, children, href }: Props) {
+export default function SidebarLink({
+  icon: Icon,
+  children,
+  href,
+}: Readonly<Props>) {
   const route = usePathname();
   const { isExtended } = useIsExtendedContext();
   const isActive = route === href;
