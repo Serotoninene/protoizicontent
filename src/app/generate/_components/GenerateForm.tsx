@@ -3,7 +3,7 @@ import SecondaryButton from "@/ui/atoms/SecondaryButton";
 
 const Header = () => (
   <div>
-    <h2 className="text-xl font-bold mb-1">Pick a theme</h2>
+    <h2 className="text-xl font-bold mb-1">Choose a theme</h2>
     <p className="text-sm text-primary-400">
       Pick one of the pre-registered topics
     </p>
@@ -18,9 +18,8 @@ const TextInput = () => (
     <div className="relative">
       <textarea
         id="prompt"
-        placeholder="Type in your prompt here..."
-        className="w-full rounded-lg blurred_background-2xl py-3 px-4 h-24 text-sm focus:outline-none"
-        style={{ resize: "none" }}
+        placeholder="Give me content for videos about ..."
+        className="w-full rounded-lg bg-white bg-opacity-10 backdrop-blur-2xl py-3 px-4 h-24 text-sm focus:outline-none resize-none"
       />
       <div className="absolute bottom-4 right-4 px-3 py-2 text-primary-400 text-xs font-medium bg-white rounded-full">
         ⌘ + Ent
