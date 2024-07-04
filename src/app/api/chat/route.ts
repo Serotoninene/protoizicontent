@@ -20,8 +20,6 @@ export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
         eq(messages.conversationId, conversation_id as string),
     });
 
-    console.log(initialMessages);
-
     // needs to get the message history thhrough the conversation_id
     const result = await streamText({
       model: openai("gpt-4-turbo"),
