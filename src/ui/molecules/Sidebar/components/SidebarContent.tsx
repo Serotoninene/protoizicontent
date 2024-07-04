@@ -36,9 +36,9 @@ export function SidebarHeader() {
       <Logo />
       <Link
         href="/generate"
-        className="w-8 h-8 flex justify-center items-center border border-primary-900 rounded-md"
+        className="w-7 h-7 flex justify-center items-center border border-primary-900 rounded-md"
       >
-        <SparklesIcon className="w-5 h-5" />
+        <SparklesIcon className="w-4 h-4" />
       </Link>
       <div className="h-[0.5px] w-full bg-primary-200" />
 
