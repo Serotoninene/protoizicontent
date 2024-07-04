@@ -31,9 +31,12 @@ What i want is just to be able to click a button and receive ten images with
 [X] add the correct webhook secret to vercel's env variables
 [X] add a videoCount to the user table
 [X] design a dashboard
-[] code the side bar menu
-[] code generate page
-[] code it
+[X] code the side bar menu
+[] code generate form
+[] code generate checkbox list
+[] code generate text animation shower
+[] code the progress tracker
+[] animate the side bar menu to be extended and contracted
 [] limit access to video creation in function of the role
 [] generate the production stripe keys (all the env variables but also the products api)
 [] set up the project
