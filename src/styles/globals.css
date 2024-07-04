@@ -9,3 +9,7 @@
     margin: 0;
   }
 }
+
+.blurred_background-2xl {
+  @apply bg-white bg-opacity-70 backdrop-blur-2xl;
+}

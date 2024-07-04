@@ -34,7 +34,7 @@ const AuthButtons = async () => {
     return (
       <div className="flex gap-6">
         <Link href="/generate">
-          <SecondaryButton>
+          <SecondaryButton pill>
             <div className="flex items-center gap-2">
               <p>Generate</p>
               <SparklesIcon className="w-4 h-4" />
