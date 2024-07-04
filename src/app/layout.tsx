@@ -43,7 +43,7 @@ export default async function RootLayout({
       <AI initialAIState={history}>
         <html lang="en">
           <body
-            className={`font-sans ${inter.variable} text-primary-700 px-6 pt-7 xl max-w-[1280px] mx-auto`}
+            className={`font-sans ${inter.variable} text-primary-700 px-6 pt-7 xl max-w-[1280px] mx-auto bg-[#F7F5F5]`}
           >
             {children}
           </body>
