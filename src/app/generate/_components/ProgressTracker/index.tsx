@@ -8,7 +8,7 @@ export type TrackerStates = "default" | "active" | "completed";
 export default function ProgressTracker() {
   const states: TrackerStates[] = ["default", "active", "completed"];
   const [currentState, setCurrentState] = useState<TrackerStates | undefined>(
-    states[1],
+    states[0],
   );
 
   const moveStepForward = () => {

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { TrackerStates } from "../index";
 
-import gsap from "gsap";
+import gsap, { Power3 } from "gsap";
 import clsx from "clsx";
 import { CheckIcon } from "@heroicons/react/20/solid";
 
@@ -16,19 +16,21 @@ const TrackerUnit = ({ label, index, state }: Props) => {
   const checkIconRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    gsap.to([labelRef.current, checkIconRef.current], {
-      yPercent: -100,
-      delay: 1,
-      onComplete: () => {
-        console.log("completed");
-      },
-    });
-  }, []);
+    if (state === "completed") {
+      gsap.to([labelRef.current, checkIconRef.current], {
+        yPercent: -100,
+        ease: Power3.easeOut,
+        duration: 0.3,
+      });
+    }
+  }, [state]);
   return (
-    <div className="flex gap-2 items-center">
+    <div
+      className={`flex gap-2 items-center ${state === "default" ? "opacity-80" : ""}`}
+    >
       <div
         className={clsx(
-          "w-6 h-6 flex_center rounded-full text-xs text-primary-700 transition duration-300 ease-in-out",
+          "w-6 h-6 flex_center rounded-full text-xs text-primary-700 transition duration-300 ease-out",
           {
             "text-primary-700 border border-primary-700": state === "default",
             "bg-primary-700 text-white ": state === "active",
@@ -45,7 +47,11 @@ const TrackerUnit = ({ label, index, state }: Props) => {
           </p>
         </div>
       </div>
-      <p className="text-sm font-semibold">{label}</p>
+      <p
+        className={`text-sm font-semibold transition duration-300 ease-out ${state === "completed" ? "text-secondary-500" : ""}`}
+      >
+        {label}
+      </p>
     </div>
   );
 };
