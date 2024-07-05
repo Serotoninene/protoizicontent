@@ -53,6 +53,8 @@ export async function generateContent(input: string): Promise<ClientObject> {
     collectedResults.push(partialObject);
   }
 
+  console.log(collectedResults);
+
   // Serialize the collected results to a string or array of strings
   const displayData = collectedResults.map((obj) => ({
     setup: obj.setup,
@@ -118,7 +120,6 @@ export const AI = createAI<ServerMessage[], ClientMessage[]>({
   onGetUIState: async () => {
     // @ts-expect-error - This is a server-side function
     const history: ServerMessage[] = getAIState();
-
     return history.map(({ role, content }) => ({
       id: generateId(),
       role,
