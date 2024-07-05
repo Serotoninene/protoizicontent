@@ -1,3 +1,5 @@
+"use client";
+
 import TrackerUnit from "./components/TrackerUnit";
 
 export default function ProgressTracker() {
