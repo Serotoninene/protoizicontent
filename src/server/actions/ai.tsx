@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use server";
 
+import type { ReactNode } from "react";
+
 import { db } from "@/server/db";
 import { getConversationOnInit } from "@/server/db/routes/conversation";
 import { messages } from "@/server/db/schema";
-import { openai } from "@ai-sdk/openai";
-import { currentUser } from "@clerk/nextjs/server";
+
 import { generateId } from "ai";
+import { openai } from "@ai-sdk/openai";
 import { createAI, getAIState, getMutableAIState, streamUI } from "ai/rsc";
-import { ReactNode } from "react";
+
+import { currentUser } from "@clerk/nextjs/server";
 
 export interface ServerMessage {
   role: string; // "user" | "assistant" | "function";
@@ -24,8 +27,6 @@ export interface ClientMessage {
 export async function continueConversation(
   input: string,
 ): Promise<ClientMessage> {
-  "use server";
-
   const history = getMutableAIState();
 
   const result = await streamUI({
@@ -56,7 +57,6 @@ export const AI = createAI<ServerMessage[], ClientMessage[]>({
     continueConversation,
   },
   onSetAIState: async ({ state, done }) => {
-    "use server";
     const user = await currentUser();
     const conversation = await getConversationOnInit(user!.id);
 
@@ -73,7 +73,6 @@ export const AI = createAI<ServerMessage[], ClientMessage[]>({
     }
   },
   onGetUIState: async () => {
-    "use server";
     // @ts-expect-error - This is a server-side function
     const history: ServerMessage[] = getAIState();
 
