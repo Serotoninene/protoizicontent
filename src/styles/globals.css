@@ -10,6 +10,15 @@
   }
 }
 
+/* Custom classes */
 .blurred_background-2xl {
   @apply bg-white bg-opacity-70 backdrop-blur-2xl;
+}
+
+.flex_center {
+  @apply flex items-center justify-center;
+}
+
+.flex_center_column {
+  @apply flex flex-col items-center justify-center;
 }
