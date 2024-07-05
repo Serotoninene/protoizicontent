@@ -14,19 +14,49 @@ type Props = {
 const TrackerUnit = ({ label, index, state }: Props) => {
   const labelRef = useRef<HTMLParagraphElement>(null);
   const checkIconRef = useRef<HTMLParagraphElement>(null);
+  const defaultLineRef = useRef<HTMLDivElement>(null);
+  const completedLineRef = useRef<HTMLDivElement>(null);
+  const tl = useRef<gsap.core.Timeline>();
+
+  useEffect(() => {
+    gsap.set(completedLineRef.current, {
+      xPercent: -100,
+    });
+
+    tl.current = gsap.timeline({
+      paused: true,
+      defaults: {
+        ease: Power3.easeOut,
+        duration: 0.3,
+      },
+    });
+
+    tl.current.to([labelRef.current, checkIconRef.current], {
+      yPercent: -100,
+    });
+
+    tl.current.to(defaultLineRef.current, {
+      xPercent: 100,
+    });
+
+    tl.current.to(
+      completedLineRef.current,
+      {
+        xPercent: 0,
+      },
+      "+=0.1",
+    );
+  }, []);
 
   useEffect(() => {
     if (state === "completed") {
-      gsap.to([labelRef.current, checkIconRef.current], {
-        yPercent: -100,
-        ease: Power3.easeOut,
-        duration: 0.3,
-      });
+      tl.current?.play();
     }
   }, [state]);
+
   return (
     <div
-      className={`flex gap-2 items-center ${state === "default" ? "opacity-80" : ""}`}
+      className={`flex items-center  gap-2 ${state === "default" ? "opacity-80" : ""}`}
     >
       <div
         className={clsx(
@@ -38,12 +68,12 @@ const TrackerUnit = ({ label, index, state }: Props) => {
           },
         )}
       >
-        <div className="relative">
-          <p ref={labelRef} className="pr-[1px] w-4 text-center">
+        <div className="relative overflow-hidden">
+          <p ref={labelRef} className="pr-[1px] w-3 text-center">
             {index}
           </p>
           <p ref={checkIconRef} className="absolute top-full">
-            <CheckIcon className="text-white w-4" />
+            <CheckIcon className="text-white w-3 h-4" />
           </p>
         </div>
       </div>
@@ -52,6 +82,17 @@ const TrackerUnit = ({ label, index, state }: Props) => {
       >
         {label}
       </p>
+      {/* Separating lines */}
+      <div className="relative w-10 h-[1px] overflow-hidden">
+        <div
+          ref={defaultLineRef}
+          className="h-full w-full bg-primary-700"
+        ></div>
+        <div
+          ref={completedLineRef}
+          className="absolute bg-secondary-500 inset-0"
+        />
+      </div>
     </div>
   );
 };
