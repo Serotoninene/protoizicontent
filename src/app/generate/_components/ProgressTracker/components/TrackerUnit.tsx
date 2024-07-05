@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import type { TrackerStates } from "../index";
+import type { TrackerState } from "../index";
 
 import gsap, { Power3 } from "gsap";
 import clsx from "clsx";
@@ -8,10 +8,35 @@ import { CheckIcon } from "@heroicons/react/20/solid";
 type Props = {
   label: string;
   index: number;
-  state?: TrackerStates;
+  state?: TrackerState;
+  isLast?: boolean;
 };
 
-const TrackerUnit = ({ label, index, state }: Props) => {
+type DividerLineProps = {
+  isLast?: boolean;
+  defaultLineRef: React.RefObject<HTMLDivElement>;
+  completedLineRef: React.RefObject<HTMLDivElement>;
+};
+
+function DividerLine({
+  isLast,
+  defaultLineRef,
+  completedLineRef,
+}: DividerLineProps) {
+  if (isLast) return null;
+
+  return (
+    <div className="relative w-10 h-[1px] overflow-hidden">
+      <div ref={defaultLineRef} className="h-full w-full bg-primary-700"></div>
+      <div
+        ref={completedLineRef}
+        className="absolute bg-secondary-500 inset-0"
+      />
+    </div>
+  );
+}
+
+const TrackerUnit = ({ label, index, state, isLast }: Props) => {
   const labelRef = useRef<HTMLParagraphElement>(null);
   const checkIconRef = useRef<HTMLParagraphElement>(null);
   const defaultLineRef = useRef<HTMLDivElement>(null);
@@ -82,17 +107,13 @@ const TrackerUnit = ({ label, index, state }: Props) => {
       >
         {label}
       </p>
+
       {/* Separating lines */}
-      <div className="relative w-10 h-[1px] overflow-hidden">
-        <div
-          ref={defaultLineRef}
-          className="h-full w-full bg-primary-700"
-        ></div>
-        <div
-          ref={completedLineRef}
-          className="absolute bg-secondary-500 inset-0"
-        />
-      </div>
+      <DividerLine
+        isLast={isLast}
+        defaultLineRef={defaultLineRef}
+        completedLineRef={completedLineRef}
+      />
     </div>
   );
 };
