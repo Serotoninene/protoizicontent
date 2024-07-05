@@ -94,7 +94,7 @@ const TrackerUnit = ({ label, index, state, isLast }: Props) => {
         )}
       >
         <div className="relative overflow-hidden">
-          <p ref={labelRef} className="pr-[1px] w-3 text-center">
+          <p ref={labelRef} className="w-3 text-center">
             {index}
           </p>
           <p ref={checkIconRef} className="absolute top-full">
