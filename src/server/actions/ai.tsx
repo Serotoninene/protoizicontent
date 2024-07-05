@@ -4,8 +4,8 @@
 import type { ReactNode } from "react";
 
 import { db } from "@/server/db";
-import { getConversationOnInit } from "@/server/db/routes/conversation";
 import { messages } from "@/server/db/schema";
+import { getConversationOnInit } from "@/server/db/routes/conversation";
 
 import { generateId } from "ai";
 import { openai } from "@ai-sdk/openai";

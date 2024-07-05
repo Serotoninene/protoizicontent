@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/server/db";
 import stripe from "@/server/lib/stripe";
 import { auth, currentUser } from "@clerk/nextjs/server";
@@ -6,8 +8,6 @@ import type { Tier } from "types";
 
 // Function to handle subscription logic for a given tier
 export async function handleSubscriptions(tier: Tier) {
-  "use server";
-
   // Attempt to retrieve the current user's session
   const session = await currentUser();
 
