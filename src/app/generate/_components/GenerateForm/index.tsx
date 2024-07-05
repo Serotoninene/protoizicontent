@@ -1,5 +1,10 @@
+/* eslint-disable */
+
 import Divider from "@/ui/atoms/Divider";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
+import { useActions } from "ai/rsc";
+import { useState } from "react";
+import theme from "tailwindcss/defaultTheme";
 
 const Header = () => (
   <div>
@@ -28,24 +33,40 @@ const TextInput = () => (
   </div>
 );
 
+const adjustPrompt = (theme: string) => {
+  return `Give me a ${theme} quote in two sentences that will make me think about life and the universe. no more than 50 words`;
+};
+
 export default function GenerateForm() {
+  const options = ["Philosophy", "Self-Improvement", "Comedy"];
+
+  const [prompt, setPrompt] = useState("");
+  const { generateContent } = useActions();
+
   return (
     <div className="relative">
       <div className="absolute h-24 w-8 top-4 left-2 bg-secondary-400 rounded-md"></div>
       <div className="absolute rounded-full h-20 w-20 bottom-44 right-2 bg-secondary-400"></div>
       <div className="absolute rounded-full h-32 w-40 bottom-4 right-2 bg-secondary-400"></div>
-      <form className="blurred_background-2xl flex flex-col gap-6 px-6 py-10 rounded-xl md:min-w-[536px]">
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          await generateContent(adjustPrompt(prompt));
+        }}
+        className="blurred_background-2xl flex flex-col gap-6 px-6 py-10 rounded-xl md:min-w-[536px]"
+      >
         <Header />
         <ul className="flex justify-center items-center gap-8">
-          <li>
-            <SecondaryButton>Philosophy</SecondaryButton>
-          </li>
-          <li>
-            <SecondaryButton>Self-Improvement</SecondaryButton>
-          </li>
-          <li>
-            <SecondaryButton>Comedy</SecondaryButton>
-          </li>
+          {options.map((option) => (
+            <SecondaryButton
+              key={option}
+              onClick={() => {
+                setPrompt(option);
+              }}
+            >
+              {option}
+            </SecondaryButton>
+          ))}
         </ul>
 
         <Divider />

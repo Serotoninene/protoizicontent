@@ -2,11 +2,12 @@
 
 "use client";
 
-import { ClientMessage } from "@/server/actions/ai";
+import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import { ClientMessage } from "@/server/actions/ai";
+
 import { generateId } from "ai";
 import { useActions, useUIState } from "ai/rsc";
-import { useState } from "react";
 
 // Force the page to be dynamic and allow streaming responses up to 30 seconds
 export const dynamic = "force-dynamic";

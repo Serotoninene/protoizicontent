@@ -4,14 +4,15 @@
 import type { ReactNode } from "react";
 
 import { db } from "@/server/db";
-import { messages } from "@/server/db/schema";
 import { getConversationOnInit } from "@/server/db/routes/conversation";
+import { messages } from "@/server/db/schema";
 
-import { generateId } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { generateId, streamObject } from "ai";
 import { createAI, getAIState, getMutableAIState, streamUI } from "ai/rsc";
 
 import { currentUser } from "@clerk/nextjs/server";
+import { z } from "zod";
 
 export interface ServerMessage {
   role: string; // "user" | "assistant" | "function";
@@ -22,6 +23,47 @@ export interface ClientMessage {
   id: string;
   role: string; // "user" | "assistant" | "function";
   display: ReactNode;
+}
+
+export interface ClientObject {
+  id: string;
+  role: string;
+  display: string;
+}
+export async function generateContent(input: string): Promise<ClientObject> {
+  const history = getMutableAIState();
+
+  console.log("-------------------- input ----------------");
+  console.log(input);
+
+  const result = await streamObject({
+    model: openai("gpt-3.5-turbo"),
+    messages: [...history.get(), { role: "user", content: input }],
+    schema: z.object({
+      setup: z.string().describe("the setup of the sentence"),
+      conclusion: z
+        .string()
+        .describe("the conclusion/punchline of the sentence"),
+    }),
+  });
+
+  const collectedResults = [];
+
+  for await (const partialObject of result.partialObjectStream) {
+    collectedResults.push(partialObject);
+  }
+
+  // Serialize the collected results to a string or array of strings
+  const displayData = collectedResults.map((obj) => ({
+    setup: obj.setup,
+    conclusion: obj.conclusion,
+  }));
+
+  return {
+    id: generateId(),
+    role: "assistant",
+    display: JSON.stringify(displayData), // Ensure the data is serializable
+  };
 }
 
 export async function continueConversation(
@@ -55,6 +97,7 @@ export async function continueConversation(
 export const AI = createAI<ServerMessage[], ClientMessage[]>({
   actions: {
     continueConversation,
+    generateContent,
   },
   onSetAIState: async ({ state, done }) => {
     const user = await currentUser();

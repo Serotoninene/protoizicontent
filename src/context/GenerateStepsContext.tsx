@@ -24,7 +24,7 @@ export const GenerateStepsProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const steps = ["Start", "Theme", "Select", "Done"];
+  const steps = ["Theme", "Select", "Done"];
   const [currentStep, setCurrentStep] = useState(0);
 
   const moveStepForward = () => {
