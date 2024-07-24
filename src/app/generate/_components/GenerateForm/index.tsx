@@ -4,7 +4,6 @@ import Divider from "@/ui/atoms/Divider";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
 import { useActions } from "ai/rsc";
 import { useState } from "react";
-import theme from "tailwindcss/defaultTheme";
 
 const Header = () => (
   <div>
@@ -33,9 +32,8 @@ const TextInput = () => (
   </div>
 );
 
-const adjustPrompt = (theme: string) => {
-  return `Give me a ${theme} quote in two sentences that will make me think about life and the universe. no more than 50 words`;
-};
+const adjustPrompt = (theme: string) =>
+  `Give me a ${theme} quote in two sentences that will make me think about life and the universe. no more than 50 words`;
 
 export default function GenerateForm() {
   const options = ["Philosophy", "Self-Improvement", "Comedy"];
