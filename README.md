@@ -34,6 +34,8 @@ What i want is just to be able to click a button and receive ten images with
 [X] code the side bar menu
 [X] code generate form
 [X] code the progress tracker
+[X] save the quotes in the db
+[] retrieve the object streamed on the client side
 [] code generate checkbox list
 [] code generate text animation shower
 [] in inputForm -> when click on ⌘ + Ent -> submit form
