@@ -31,7 +31,6 @@ export interface ClientObject {
   display: string;
 }
 export async function generateContent(input: string): Promise<ClientObject> {
-  console.log("hello");
   const history = getMutableAIState();
 
   const result = await streamObject({
@@ -55,8 +54,6 @@ export async function generateContent(input: string): Promise<ClientObject> {
   // i just want the value of the setup and the value of the conclusion and join them in the same string
   const stringifiedLastResult =
     lastResult?.setup + " " + lastResult?.conclusion;
-
-  console.log(stringifiedLastResult);
 
   history.done((messages: ServerMessage[]) => [
     ...messages,
@@ -115,7 +112,6 @@ export const AI = createAI<ServerMessage[], ClientMessage[]>({
     const conversation = await getConversationOnInit(user!.id);
 
     if (done) {
-      console.log("the message of the ai is done, saving the conversation");
       for (let i = state.length - 2; i < state.length; i++) {
         // saving the user's prompt and the ai answer in the db
         await db.insert(messages).values({

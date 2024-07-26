@@ -1,9 +1,13 @@
+"use client";
 /* eslint-disable */
 
 import Divider from "@/ui/atoms/Divider";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
-import { useActions } from "ai/rsc";
+import { readStreamableValue, useActions } from "ai/rsc";
 import { useState } from "react";
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
 
 const Header = () => (
   <div>
@@ -33,11 +37,10 @@ const TextInput = () => (
 );
 
 const adjustPrompt = (theme: string) =>
-  `Give me a ${theme} quote in two sentences that will make me think about life and the universe. no more than 50 words`;
+  `Give me a  new ${theme} quote in two sentences that will make me think about life and the universe. no more than 50 words`;
 
 export default function GenerateForm() {
   const options = ["Philosophy", "Self-Improvement", "Comedy"];
-
   const [prompt, setPrompt] = useState("");
   const { generateContent } = useActions();
 
@@ -49,7 +52,7 @@ export default function GenerateForm() {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          const resp = await generateContent(adjustPrompt(prompt));
+          const object = await generateContent(prompt);
         }}
         className="blurred_background-2xl flex flex-col gap-6 px-6 py-10 rounded-xl md:min-w-[536px]"
       >
@@ -59,7 +62,7 @@ export default function GenerateForm() {
             <SecondaryButton
               key={option}
               onClick={() => {
-                setPrompt(option);
+                setPrompt(adjustPrompt(option));
               }}
             >
               {option}
