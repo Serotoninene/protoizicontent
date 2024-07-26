@@ -9,7 +9,13 @@ import { messages } from "@/server/db/schema";
 
 import { openai } from "@ai-sdk/openai";
 import { generateId, streamObject } from "ai";
-import { createAI, getAIState, getMutableAIState, streamUI } from "ai/rsc";
+import {
+  createAI,
+  createStreamableValue,
+  getAIState,
+  getMutableAIState,
+  streamUI,
+} from "ai/rsc";
 
 import { currentUser } from "@clerk/nextjs/server";
 import { z } from "zod";
@@ -30,48 +36,51 @@ export interface ClientObject {
   role: string;
   display: string;
 }
-export async function generateContent(input: string): Promise<ClientObject> {
+
+interface Quote {
+  setup: string;
+  conclusion: string;
+}
+
+export async function generateContent(input: string) {
   const history = getMutableAIState();
+  const stream = createStreamableValue<Quote>();
 
-  const result = await streamObject({
-    model: openai("gpt-3.5-turbo"),
-    messages: [...history.get(), { role: "user", content: input }],
-    schema: z.object({
-      setup: z.string().describe("the setup of the sentence"),
-      conclusion: z
-        .string()
-        .describe("the conclusion/punchline of the sentence"),
-    }),
-  });
+  await (async () => {
+    const { partialObjectStream } = await streamObject({
+      model: openai("gpt-3.5-turbo"),
+      messages: [...history.get(), { role: "user", content: input }],
+      schema: z.object({
+        setup: z.string().describe("the setup of the sentence"),
+        conclusion: z
+          .string()
+          .describe("the conclusion/punchline of the sentence"),
+      }),
+    });
 
-  const collectedResults = [];
+    for await (const partialObject of partialObjectStream) {
+      stream.update({
+        setup: partialObject.setup ?? "",
+        conclusion: partialObject.conclusion ?? "",
+      });
+    }
 
-  for await (const partialObject of result.partialObjectStream) {
-    collectedResults.push(partialObject);
-  }
+    stream.done();
+  })();
 
-  const lastResult = collectedResults[collectedResults.length - 1];
-  // i just want the value of the setup and the value of the conclusion and join them in the same string
-  const stringifiedLastResult =
-    lastResult?.setup + " " + lastResult?.conclusion;
+  const result = stream.value;
 
-  history.done((messages: ServerMessage[]) => [
+  const stringifiedResult = result.curr.setup + " " + result.curr.conclusion;
+
+  console.log(stringifiedResult);
+
+  history.done((messages: ClientMessage[]) => [
     ...messages,
     { role: "user", content: input },
-    { role: "assistant", content: stringifiedLastResult },
+    { role: "assistant", content: stringifiedResult },
   ]);
 
-  // Serialize the collected results to a string or array of strings
-  const displayData = collectedResults.map((obj) => ({
-    setup: obj.setup,
-    conclusion: obj.conclusion,
-  }));
-
-  return {
-    id: generateId(),
-    role: "assistant",
-    display: JSON.stringify(displayData), // Ensure the data is serializable
-  };
+  return { object: stream.value };
 }
 
 export async function continueConversation(
