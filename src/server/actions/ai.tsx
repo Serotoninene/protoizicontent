@@ -46,7 +46,7 @@ export async function generateContent(input: string) {
   const history = getMutableAIState();
   const stream = createStreamableValue<Quote>();
 
-  await (async () => {
+  (async () => {
     const { partialObjectStream } = await streamObject({
       model: openai("gpt-3.5-turbo"),
       messages: [...history.get(), { role: "user", content: input }],
@@ -56,29 +56,24 @@ export async function generateContent(input: string) {
           .string()
           .describe("the conclusion/punchline of the sentence"),
       }),
+      onFinish: ({ object }) => {
+        history.done((messages: ClientMessage[]) => [
+          ...messages,
+          { role: "user", content: input },
+          {
+            role: "assistant",
+            content: JSON.stringify(object?.setup + object?.conclusion),
+          },
+        ]);
+      },
     });
 
     for await (const partialObject of partialObjectStream) {
-      stream.update({
-        setup: partialObject.setup ?? "",
-        conclusion: partialObject.conclusion ?? "",
-      });
+      stream.update(partialObject);
     }
 
     stream.done();
   })();
-
-  const result = stream.value;
-
-  const stringifiedResult = result.curr.setup + " " + result.curr.conclusion;
-
-  console.log(stringifiedResult);
-
-  history.done((messages: ClientMessage[]) => [
-    ...messages,
-    { role: "user", content: input },
-    { role: "assistant", content: stringifiedResult },
-  ]);
 
   return { object: stream.value };
 }
@@ -111,10 +106,40 @@ export async function continueConversation(
   };
 }
 
+export async function generate() {
+  const stream = createStreamableValue();
+
+  (async () => {
+    const { partialObjectStream } = await streamObject({
+      model: openai("gpt-4-turbo"),
+      system: "You generate three notifications for a messages app.",
+      prompt: "Generate three notifications for a messages app.",
+      schema: z.object({
+        notifications: z.array(
+          z.object({
+            name: z.string().describe("Name of a fictional person."),
+            message: z.string().describe("Do not use emojis or links."),
+            minutesAgo: z.number(),
+          }),
+        ),
+      }),
+    });
+
+    for await (const partialObject of partialObjectStream) {
+      stream.update(partialObject);
+    }
+
+    stream.done();
+  })();
+
+  return { object: stream.value };
+}
+
 export const AI = createAI<ServerMessage[], ClientMessage[]>({
   actions: {
     continueConversation,
     generateContent,
+    generate,
   },
   onSetAIState: async ({ state, done }) => {
     const user = await currentUser();

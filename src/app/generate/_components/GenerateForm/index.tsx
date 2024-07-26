@@ -1,9 +1,11 @@
 "use client";
+import { generate } from "@/server/actions/ai";
+
 /* eslint-disable */
 
 import Divider from "@/ui/atoms/Divider";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
-import { readStreamableValue, useActions } from "ai/rsc";
+import { readStreamableValue, StreamableValue, useActions } from "ai/rsc";
 import { useState } from "react";
 
 // Allow streaming responses up to 30 seconds
@@ -39,10 +41,29 @@ const TextInput = () => (
 const adjustPrompt = (theme: string) =>
   `Give me a  new ${theme} quote in two sentences that will make me think about life and the universe. no more than 50 words`;
 
+const useStreamableState = <T,>(initialState: T) => {
+  const [state, setState] = useState<T>(initialState);
+  const updateState = async (
+    streamable: Promise<StreamableValue<T>>,
+    stateupdate: Partial<T> = {},
+  ) => {
+    setState((old) => ({ ...old, ...stateupdate }));
+    for await (const v of readStreamableValue(await streamable)) {
+      setState((old) => ({ ...old, ...v }));
+    }
+  };
+  return [state, updateState] as [T, typeof updateState];
+};
+
 export default function GenerateForm() {
   const options = ["Philosophy", "Self-Improvement", "Comedy"];
   const [prompt, setPrompt] = useState("");
   const { generateContent } = useActions();
+
+  const [state, updateState] = useStreamableState({
+    setup: "",
+    conclusion: "",
+  });
 
   return (
     <div className="relative">
@@ -52,7 +73,8 @@ export default function GenerateForm() {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          const object = await generateContent(prompt);
+          const { object } = await generateContent(prompt);
+          await updateState(object);
         }}
         className="blurred_background-2xl flex flex-col gap-6 px-6 py-10 rounded-xl md:min-w-[536px]"
       >
@@ -73,6 +95,8 @@ export default function GenerateForm() {
         <Divider />
 
         <TextInput />
+
+        <div> {state.setup}</div>
       </form>
     </div>
   );
