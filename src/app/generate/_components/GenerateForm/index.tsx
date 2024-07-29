@@ -39,7 +39,7 @@ const TextInput = () => (
 );
 
 const adjustPrompt = (theme: string) =>
-  `Give me a  new ${theme} quote in two sentences that will make me think about life and the universe. no more than 50 words`;
+  `Give me ${theme} quotes in two sentences that will make me think about life and the universe. no more than 50 words`;
 
 const useStreamableState = <T,>(initialState: T) => {
   const [state, setState] = useState<T>(initialState);
@@ -96,7 +96,7 @@ export default function GenerateForm() {
 
         <TextInput />
 
-        <div> {state.setup}</div>
+        <div> {JSON.stringify(state.quotes)}</div>
       </form>
     </div>
   );

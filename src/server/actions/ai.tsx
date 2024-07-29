@@ -39,6 +39,7 @@ export interface ClientObject {
 
 interface Quote {
   setup: string;
+  inBetween: string;
   conclusion: string;
 }
 
@@ -48,13 +49,24 @@ export async function generateContent(input: string) {
 
   (async () => {
     const { partialObjectStream } = await streamObject({
-      model: openai("gpt-3.5-turbo"),
+      model: openai("gpt-4-turbo"),
+      system:
+        "generate 10 quotes on the topic precised in the prompt. the quotes should never the same and should be unique",
       messages: [...history.get(), { role: "user", content: input }],
       schema: z.object({
-        setup: z.string().describe("the setup of the sentence"),
-        conclusion: z
-          .string()
-          .describe("the conclusion/punchline of the sentence"),
+        quotes: z.array(
+          z.object({
+            setup: z.string().describe("the setup of the sentence"),
+            inBetween: z
+              .string()
+              .describe(
+                "the element that disrupts or surprises, providing a shocking or unexpected twist between the setup and conclusion",
+              ),
+            conclusion: z
+              .string()
+              .describe("the conclusion/punchline of the sentence"),
+          }),
+        ),
       }),
       onFinish: ({ object }) => {
         history.done((messages: ClientMessage[]) => [
@@ -62,7 +74,7 @@ export async function generateContent(input: string) {
           { role: "user", content: input },
           {
             role: "assistant",
-            content: JSON.stringify(object?.setup + object?.conclusion),
+            content: JSON.stringify(object?.quotes),
           },
         ]);
       },
