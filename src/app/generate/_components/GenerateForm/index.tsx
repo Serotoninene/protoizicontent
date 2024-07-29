@@ -1,5 +1,4 @@
 "use client";
-import { generate } from "@/server/actions/ai";
 
 /* eslint-disable */
 
