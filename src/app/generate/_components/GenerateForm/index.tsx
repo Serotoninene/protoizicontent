@@ -4,11 +4,22 @@
 
 import Divider from "@/ui/atoms/Divider";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
-import { readStreamableValue, StreamableValue, useActions } from "ai/rsc";
+import { useStreamableState } from "@/utils/hooks/useStreamableState";
+import { useActions } from "ai/rsc";
 import { useState } from "react";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
+
+type Quote = {
+  setup: string;
+  inBetween: string;
+  conclusion: string;
+};
+
+type State = {
+  quotes: Quote[];
+};
 
 const Header = () => (
   <div>
@@ -40,29 +51,12 @@ const TextInput = () => (
 const adjustPrompt = (theme: string) =>
   `Give me ${theme} quotes in two sentences that will make me think about life and the universe. no more than 50 words`;
 
-const useStreamableState = <T,>(initialState: T) => {
-  const [state, setState] = useState<T>(initialState);
-  const updateState = async (
-    streamable: Promise<StreamableValue<T>>,
-    stateupdate: Partial<T> = {},
-  ) => {
-    setState((old) => ({ ...old, ...stateupdate }));
-    for await (const v of readStreamableValue(await streamable)) {
-      setState((old) => ({ ...old, ...v }));
-    }
-  };
-  return [state, updateState] as [T, typeof updateState];
-};
-
 export default function GenerateForm() {
   const options = ["Philosophy", "Self-Improvement", "Comedy"];
   const [prompt, setPrompt] = useState("");
   const { generateContent } = useActions();
 
-  const [state, updateState] = useStreamableState({
-    setup: "",
-    conclusion: "",
-  });
+  const [state, updateState] = useStreamableState<State>({ quotes: [] });
 
   return (
     <div className="relative">
