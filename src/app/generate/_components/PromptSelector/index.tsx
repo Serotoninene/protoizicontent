@@ -24,7 +24,15 @@ const testData = [
 ];
 
 const PromptSelector = ({ prompts }: Props) => {
-  return <div>{JSON.stringify(prompts)}</div>;
+  return (
+    <div className="relative">
+      <div className="rounded-lg p-6 border border-secondary-50 bg-white bg-opacity-70 backdrop-blur-2xl">
+        <h2 className="">
+          Select the sentences you’d like to turn into videos
+        </h2>
+      </div>
+    </div>
+  );
 };
 
 export default PromptSelector;

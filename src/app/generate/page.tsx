@@ -22,7 +22,7 @@ export default function Generate() {
   return (
     <GenerateStepsProvider>
       <div className="relative flex h-full justify-center items-center rounded-lg border border-secondary-50 border-opacity-70">
-        <GenerateForm updateState={updateState} />
+        {/* <GenerateForm updateState={updateState} /> */}
         <PromptSelector prompts={state} />
         <ProgressTracker />
       </div>

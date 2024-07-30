@@ -3,40 +3,16 @@
 import { useGenerateStepsContext } from "@/context/GenerateStepsContext";
 /* eslint-disable */
 
+import { useState } from "react";
+import { useActions } from "ai/rsc";
+
 import Divider from "@/ui/atoms/Divider";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
-import { useActions } from "ai/rsc";
-import { useState } from "react";
+
+import { Header, TextInput } from "./components";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
-
-const Header = () => (
-  <div>
-    <h2 className="text-xl font-bold mb-1">Choose a theme</h2>
-    <p className="text-sm text-primary-400">
-      Pick one of the pre-registered topics
-    </p>
-  </div>
-);
-
-const TextInput = () => (
-  <div className="flex flex-col gap-3">
-    <label htmlFor="prompt" className="text-sm text-primary-400">
-      Type in the precise topic you seek.
-    </label>
-    <div className="relative">
-      <textarea
-        id="prompt"
-        placeholder="Give me content for videos about ..."
-        className="w-full rounded-lg bg-white bg-opacity-10 backdrop-blur-2xl py-3 px-4 h-24 text-sm focus:outline-none resize-none"
-      />
-      <div className="absolute bottom-4 right-4 px-3 py-2 text-primary-400 text-xs font-medium bg-white rounded-full">
-        ⌘ + Ent
-      </div>
-    </div>
-  </div>
-);
 
 type Props = {
   updateState: (object: any) => void;
