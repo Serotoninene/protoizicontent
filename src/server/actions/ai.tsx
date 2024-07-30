@@ -51,7 +51,7 @@ export async function generateContent(input: string) {
     const { partialObjectStream } = await streamObject({
       model: openai("gpt-4-turbo"),
       system:
-        "generate 10 quotes on the topic precised in the prompt. the quotes should never the same and should be unique",
+        "generate 3 quotes on the topic precised in the prompt. the quotes should never the same and should be unique",
       messages: [...history.get(), { role: "user", content: input }],
       schema: z.object({
         quotes: z.array(

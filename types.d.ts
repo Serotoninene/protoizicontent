@@ -7,3 +7,13 @@ export type Tier = {
   mostPopular: boolean;
   productId?: string;
 };
+
+export type Quote = {
+  setup: string;
+  inBetween: string;
+  conclusion: string;
+};
+
+export type AIAnswer = {
+  quotes: Quote[];
+};

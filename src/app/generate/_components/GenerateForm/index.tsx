@@ -1,25 +1,15 @@
 "use client";
 
+import { useGenerateStepsContext } from "@/context/GenerateStepsContext";
 /* eslint-disable */
 
 import Divider from "@/ui/atoms/Divider";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
-import { useStreamableState } from "@/utils/hooks/useStreamableState";
 import { useActions } from "ai/rsc";
 import { useState } from "react";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
-
-type Quote = {
-  setup: string;
-  inBetween: string;
-  conclusion: string;
-};
-
-type State = {
-  quotes: Quote[];
-};
 
 const Header = () => (
   <div>
@@ -48,15 +38,19 @@ const TextInput = () => (
   </div>
 );
 
+type Props = {
+  updateState: (object: any) => void;
+};
+
 const adjustPrompt = (theme: string) =>
   `Give me ${theme} quotes in two sentences that will make me think about life and the universe. no more than 50 words`;
 
-export default function GenerateForm() {
+export default function GenerateForm({ updateState }: Props) {
   const options = ["Philosophy", "Self-Improvement", "Comedy"];
   const [prompt, setPrompt] = useState("");
   const { generateContent } = useActions();
 
-  const [state, updateState] = useStreamableState<State>({ quotes: [] });
+  const { moveStepForward } = useGenerateStepsContext();
 
   return (
     <div className="relative">
@@ -67,6 +61,9 @@ export default function GenerateForm() {
         onSubmit={async (e) => {
           e.preventDefault();
           const { object } = await generateContent(prompt);
+          if (object) {
+            moveStepForward();
+          }
           await updateState(object);
         }}
         className="blurred_background-2xl flex flex-col gap-6 px-6 py-10 rounded-xl md:min-w-[536px]"
@@ -88,8 +85,6 @@ export default function GenerateForm() {
         <Divider />
 
         <TextInput />
-
-        <div> {JSON.stringify(state.quotes)}</div>
       </form>
     </div>
   );
