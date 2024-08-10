@@ -4,7 +4,6 @@ import {
   GenerateStepsProvider,
   useGenerateStepsContext,
 } from "@/context/GenerateStepsContext";
-import { AIAnswer } from "types";
 import { useStreamableState } from "@/utils/hooks/useStreamableState";
 
 import GenerateForm from "./_components/GenerateForm";
