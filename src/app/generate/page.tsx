@@ -5,7 +5,7 @@ import {
   useGenerateStepsContext,
 } from "@/context/GenerateStepsContext";
 import { useStreamableState } from "@/utils/hooks/useStreamableState";
-import { AIAnswer } from "types";
+import type { AIAnswer } from "types";
 
 import ProgressTracker from "./_components/ProgressTracker";
 import PromptSelector from "./_components/PromptSelector";

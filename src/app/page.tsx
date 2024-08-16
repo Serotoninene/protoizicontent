@@ -5,7 +5,6 @@ import CTASection from "./_components/CTASection";
 import Content from "./_components/Content";
 import Hero from "./_components/Hero";
 import Pricing from "./_components/Pricing";
-import Chatbot from "@/ui/organisms/Chatbot";
 
 // Ui components
 
@@ -20,7 +19,7 @@ export default async function HomePage() {
       <Pricing />
       <CTASection />
       <Footer />
-      <Chatbot />
+      {/* <Chatbot /> */}
     </main>
   );
 }
