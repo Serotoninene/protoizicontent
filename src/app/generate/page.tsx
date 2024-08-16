@@ -9,6 +9,7 @@ import type { AIAnswer } from "types";
 
 import ProgressTracker from "./_components/ProgressTracker";
 import PromptSelector from "./_components/PromptSelector";
+import GenerateForm from "./_components/GenerateForm";
 
 // Force the page to be dynamic and allow streaming responses up to 30 seconds
 export const dynamic = "force-dynamic";
@@ -32,17 +33,26 @@ const testData = [
   },
 ];
 
-export default function Generate() {
+const Steps = () => {
   const { currentStep, steps } = useGenerateStepsContext();
   const [state, updateState] = useStreamableState<AIAnswer>({
-    quotes: testData,
+    quotes: [],
   });
 
   return (
+    <>
+      {currentStep === 0 && <GenerateForm updateState={updateState} />}
+      {currentStep === 1 && <PromptSelector prompts={state} />}
+      {currentStep === 2 && <div> Final step </div>}
+    </>
+  );
+};
+
+export default function Generate() {
+  return (
     <GenerateStepsProvider>
-      <div className="relative flex h-full justify-center items-center pl-[88px] rounded-lg border border-secondary-50 border-opacity-70">
-        {/* <GenerateForm updateState={updateState} /> */}
-        <PromptSelector prompts={state} />
+      <div className="relative flex h-full justify-center items-center overflow-hidden pl-[88px] rounded-lg border border-secondary-50 border-opacity-70">
+        <Steps />
         <ProgressTracker />
       </div>
     </GenerateStepsProvider>

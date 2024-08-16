@@ -5,6 +5,7 @@ export type TrackerState = "default" | "active" | "completed";
 
 export default function ProgressTracker() {
   const { currentStep, steps } = useGenerateStepsContext();
+  console.log("from progres tracker", currentStep);
 
   return (
     <div className="absolute bottom-6 left-[50%] -translate-x-1/2">

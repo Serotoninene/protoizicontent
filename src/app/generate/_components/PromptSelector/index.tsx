@@ -20,6 +20,10 @@ const PromptSelector = ({ prompts }: Props) => {
     }
   };
 
+  const selectAll = () => {
+    setSelectedPrompts(prompts.quotes);
+  };
+
   const clearAll = () => {
     setSelectedPrompts([]);
   };
@@ -37,9 +41,9 @@ const PromptSelector = ({ prompts }: Props) => {
           </h2>
           <button
             className="text-secondary-400 text-sm font-semibold hover:underline cursor-pointer"
-            onClick={clearAll}
+            onClick={selectAll}
           >
-            Unselect All
+            Select All
           </button>
         </div>
         <div className="flex flex-col gap-4">
