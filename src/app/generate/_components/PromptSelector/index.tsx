@@ -1,11 +1,27 @@
-import React from "react";
-import type { AIAnswer } from "types";
+import React, { useState } from "react";
+import type { AIAnswer, Quote } from "types";
 
 type Props = {
   prompts: AIAnswer;
 };
 
 const PromptSelector = ({ prompts }: Props) => {
+  const [selectedPrompts, setSelectedPrompts] = useState<Quote[]>(
+    prompts.quotes,
+  );
+
+  const handleSelect = (prompt: Quote) => {
+    if (selectedPrompts.includes(prompt)) {
+      setSelectedPrompts(selectedPrompts.filter((p) => p !== prompt));
+    } else {
+      setSelectedPrompts([...selectedPrompts, prompt]);
+    }
+  };
+
+  const clearAll = () => {
+    setSelectedPrompts([]);
+  };
+
   return (
     <div className="relative ">
       <div className="rounded-lg sm:w-[50vw] space-y-[32px] p-6 border border-secondary-50 bg-white bg-opacity-70 backdrop-blur-2xl">
@@ -13,7 +29,9 @@ const PromptSelector = ({ prompts }: Props) => {
           <h2 className="font-bold text-lg leading-5 max-w-[320px]">
             Select the sentences you’d like to turn into videos
           </h2>
-          <button className="text-secondary-400">Unselect All</button>
+          <button className="text-secondary-400" onClick={clearAll}>
+            Unselect All
+          </button>
         </div>
         <div className="flex flex-col gap-4">
           {prompts.quotes.map((prompt, idx) => (
@@ -35,6 +53,10 @@ const PromptSelector = ({ prompts }: Props) => {
                 </div>
                 <input
                   type="checkbox"
+                  onChange={() => {
+                    handleSelect(prompt);
+                  }}
+                  checked={selectedPrompts.includes(prompt)}
                   className="form-checkbox h-4 w-4 cursor-pointer"
                 />
               </div>
