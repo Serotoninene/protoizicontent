@@ -14,13 +14,33 @@ import PromptSelector from "./_components/PromptSelector";
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
+const testData = [
+  {
+    setup: "The universe is an infinite library,",
+    inBetween: "each star a book,",
+    conclusion: "each life a story yet to be fully read.",
+  },
+  {
+    setup: "We are not merely observers of the universe,",
+    inBetween: "we are its conscious participants,",
+    conclusion: "engaging in the dialogue between existence and meaning.",
+  },
+  {
+    setup: "In the vastness of space,",
+    inBetween: "we find not loneliness,",
+    conclusion: "but the shared solitude that connects all life.",
+  },
+];
+
 export default function Generate() {
   const { currentStep, steps } = useGenerateStepsContext();
-  const [state, updateState] = useStreamableState<AIAnswer>({ quotes: [] });
+  const [state, updateState] = useStreamableState<AIAnswer>({
+    quotes: testData,
+  });
 
   return (
     <GenerateStepsProvider>
-      <div className="relative flex h-full justify-center items-center rounded-lg border border-secondary-50 border-opacity-70">
+      <div className="relative flex h-full justify-center items-center pl-[88px] rounded-lg border border-secondary-50 border-opacity-70">
         {/* <GenerateForm updateState={updateState} /> */}
         <PromptSelector prompts={state} />
         <ProgressTracker />
