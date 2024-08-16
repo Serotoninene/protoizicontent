@@ -1,3 +1,5 @@
+import SecondaryButton from "@/ui/atoms/SecondaryButton";
+import { SparklesIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
 import type { AIAnswer, Quote } from "types";
 
@@ -22,6 +24,10 @@ const PromptSelector = ({ prompts }: Props) => {
     setSelectedPrompts([]);
   };
 
+  const handleClick = () => {
+    console.log(selectedPrompts);
+  };
+
   return (
     <div className="relative ">
       <div className="rounded-lg sm:w-[50vw] space-y-[32px] p-6 border border-secondary-50 bg-white bg-opacity-70 backdrop-blur-2xl">
@@ -29,7 +35,10 @@ const PromptSelector = ({ prompts }: Props) => {
           <h2 className="font-bold text-lg leading-5 max-w-[320px]">
             Select the sentences you’d like to turn into videos
           </h2>
-          <button className="text-secondary-400" onClick={clearAll}>
+          <button
+            className="text-secondary-400 text-sm font-semibold hover:underline cursor-pointer"
+            onClick={clearAll}
+          >
             Unselect All
           </button>
         </div>
@@ -66,6 +75,14 @@ const PromptSelector = ({ prompts }: Props) => {
               )}
             </div>
           ))}
+        </div>
+        <div className="flex justify-center">
+          <SecondaryButton onClick={handleClick}>
+            <div className="flex items-center gap-2">
+              <p>Generate</p>
+              <SparklesIcon className="w-4 h-4" />
+            </div>
+          </SecondaryButton>
         </div>
       </div>
     </div>
