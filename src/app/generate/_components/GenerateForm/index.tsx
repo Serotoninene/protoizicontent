@@ -1,15 +1,13 @@
 "use client";
-
-import { useGenerateStepsContext } from "@/context/GenerateStepsContext";
 /* eslint-disable */
 
-import { useActions } from "ai/rsc";
 import { useState } from "react";
+import { useActions } from "ai/rsc";
+import { useGenerateStepsContext } from "@/context/GenerateStepsContext";
 
 import Divider from "@/ui/atoms/Divider";
-import SecondaryButton from "@/ui/atoms/SecondaryButton";
-
 import { Header, TextInput } from "./components";
+import SecondaryButton from "@/ui/atoms/SecondaryButton";
 import { AIAnswer } from "types";
 
 // Allow streaming responses up to 30 seconds
@@ -27,7 +25,6 @@ export default function GenerateForm({ updateState }: Props) {
   const options = ["Philosophy", "Self-Improvement", "Comedy"];
   const [prompt, setPrompt] = useState("");
   const { generateContent } = useActions();
-  const { currentStep } = useGenerateStepsContext();
 
   const { moveStepForward } = useGenerateStepsContext();
 
