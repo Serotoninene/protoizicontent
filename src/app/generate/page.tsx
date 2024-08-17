@@ -34,7 +34,7 @@ const testData = [
 ];
 
 const Steps = () => {
-  const { currentStep, steps } = useGenerateStepsContext();
+  const { currentStep } = useGenerateStepsContext();
   const [state, updateState] = useStreamableState<AIAnswer>({
     quotes: [],
   });

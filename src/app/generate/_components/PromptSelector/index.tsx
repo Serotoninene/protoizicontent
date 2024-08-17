@@ -24,12 +24,8 @@ const PromptSelector = ({ prompts }: Props) => {
     setSelectedPrompts(prompts.quotes);
   };
 
-  const clearAll = () => {
-    setSelectedPrompts([]);
-  };
-
   const handleClick = () => {
-    console.log(selectedPrompts);
+    console.log("prompt chosen", selectedPrompts);
   };
 
   return (
