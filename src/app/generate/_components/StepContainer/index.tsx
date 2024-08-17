@@ -1,8 +1,11 @@
 import { useGenerateStepsContext } from "@/context/GenerateStepsContext";
-import gsap from "gsap";
+import gsap, { Power3 } from "gsap";
 import React, { useEffect, useRef } from "react";
 
 type Props = { children: React.ReactNode; relatedStep: number };
+
+const DURATION = 0.5;
+const EASE = Power3.easeOut;
 
 const StepContainer = ({ children, relatedStep }: Props) => {
   const container = useRef<HTMLDivElement>(null);
@@ -16,6 +19,8 @@ const StepContainer = ({ children, relatedStep }: Props) => {
     if (currentStep > relatedStep) {
       gsap.to(container.current, {
         xPercent: -200,
+        duration: DURATION,
+        ease: EASE,
         onComplete: () => {
           container.current!.style.display = "none";
         },
@@ -23,7 +28,10 @@ const StepContainer = ({ children, relatedStep }: Props) => {
     }
 
     if (currentStep === relatedStep) {
-      const tl = gsap.timeline({ delay: 0.5 });
+      const tl = gsap.timeline({
+        delay: DURATION,
+        defaults: { ease: EASE, duration: DURATION },
+      });
       tl.set(container.current, {
         opacity: 1,
         display: "block",
@@ -31,7 +39,6 @@ const StepContainer = ({ children, relatedStep }: Props) => {
       });
       tl.to(container.current, {
         xPercent: 0,
-        duration: 0.5,
       });
     }
   }, [currentStep]);
