@@ -10,11 +10,13 @@ import Divider from "@/ui/atoms/Divider";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
 
 import { Header, TextInput } from "./components";
+import { AIAnswer } from "types";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 type Props = {
+  prompts?: AIAnswer;
   updateState: (object: any) => void;
 };
 

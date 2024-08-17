@@ -1,3 +1,4 @@
+import { useGenerateStepsContext } from "@/context/GenerateStepsContext";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
@@ -5,9 +6,11 @@ import type { AIAnswer, Quote } from "types";
 
 type Props = {
   prompts: AIAnswer;
+  updateState?: (object: any) => void;
 };
 
 const PromptSelector = ({ prompts }: Props) => {
+  const { moveStepForward } = useGenerateStepsContext();
   const [selectedPrompts, setSelectedPrompts] = useState<Quote[]>(
     prompts.quotes,
   );
@@ -25,7 +28,7 @@ const PromptSelector = ({ prompts }: Props) => {
   };
 
   const handleClick = () => {
-    console.log("prompt chosen", selectedPrompts);
+    moveStepForward();
   };
 
   return (
