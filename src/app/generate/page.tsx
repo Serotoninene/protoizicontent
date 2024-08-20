@@ -19,11 +19,14 @@ const StepComponents = [GenerateForm, PromptSelector, VideoVisualiser];
 const Steps = () => {
   return (
     <>
-      {StepComponents.map((Component, idx) => (
+      <StepContainer relatedStep={0}>
+        <VideoVisualiser />
+      </StepContainer>
+      {/* {StepComponents.map((Component, idx) => (
         <StepContainer key={idx} relatedStep={idx}>
           <Component />
         </StepContainer>
-      ))}
+      ))} */}
     </>
   );
 };

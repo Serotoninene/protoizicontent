@@ -1,13 +1,7 @@
-import { useSelectedPromptsContext } from "@/context/SelectedPromptsContext";
-
 const VideoVisualiser = () => {
-  const { selectedPrompts } = useSelectedPromptsContext();
-  console.log(selectedPrompts);
   return (
-    <div>
-      {selectedPrompts.map((prompt, idx) => (
-        <div key={idx}>{prompt.setup}</div>
-      ))}
+    <div className="blurred_background-2xl flex flex-col gap-6 px-6 py-10 rounded-xl md:min-w-[536px]">
+      <h1>Video Visualiser</h1>
     </div>
   );
 };
