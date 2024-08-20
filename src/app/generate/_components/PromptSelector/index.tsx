@@ -1,19 +1,14 @@
 import { useGenerateStepsContext } from "@/context/GenerateStepsContext";
+import { useStreamableStateContext } from "@/context/StreamableStateContext";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
 import type { AIAnswer, Quote } from "types";
 
-type Props = {
-  prompts: AIAnswer;
-  updateState?: (object: any) => void;
-};
-
-const PromptSelector = ({ prompts }: Props) => {
+const PromptSelector = () => {
+  const { state } = useStreamableStateContext();
   const { moveStepForward } = useGenerateStepsContext();
-  const [selectedPrompts, setSelectedPrompts] = useState<Quote[]>(
-    prompts.quotes,
-  );
+  const [selectedPrompts, setSelectedPrompts] = useState<Quote[]>(state.quotes);
 
   const handleSelect = (prompt: Quote) => {
     if (selectedPrompts.includes(prompt)) {
@@ -24,7 +19,7 @@ const PromptSelector = ({ prompts }: Props) => {
   };
 
   const selectAll = () => {
-    setSelectedPrompts(prompts.quotes);
+    setSelectedPrompts(state.quotes);
   };
 
   const handleClick = () => {
@@ -46,7 +41,7 @@ const PromptSelector = ({ prompts }: Props) => {
           </button>
         </div>
         <div className="flex flex-col gap-4">
-          {prompts.quotes.map((prompt, idx) => (
+          {state.quotes.map((prompt, idx) => (
             <div key={idx} className="flex flex-col gap-4">
               <div className="flex justify-between items-start gap-4">
                 <div className="flex flex-col gap-1 text-sm flex-grow">
@@ -73,7 +68,7 @@ const PromptSelector = ({ prompts }: Props) => {
                 />
               </div>
               {/* Divider line */}
-              {idx < prompts.quotes.length - 1 && (
+              {idx < state.quotes.length - 1 && (
                 <hr className="border-t border-gray-300" />
               )}
             </div>

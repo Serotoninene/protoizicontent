@@ -9,20 +9,18 @@ import Divider from "@/ui/atoms/Divider";
 import { Header, TextInput } from "./components";
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
 import { AIAnswer } from "types";
+import { useStreamableStateContext } from "@/context/StreamableStateContext";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
-type Props = {
-  prompts?: AIAnswer;
-  updateState: (object: any) => void;
-};
-
 const adjustPrompt = (theme: string) =>
   `Give me ${theme} quotes in two sentences that will make me think about life and the universe. no more than 50 words`;
 
-export default function GenerateForm({ updateState }: Props) {
+export default function GenerateForm() {
+  const { updateState } = useStreamableStateContext();
   const options = ["Philosophy", "Self-Improvement", "Comedy"];
+
   const [prompt, setPrompt] = useState("");
   const { generateContent } = useActions();
 

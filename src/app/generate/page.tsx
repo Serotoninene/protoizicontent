@@ -1,6 +1,7 @@
 "use client";
 
 import { GenerateStepsProvider } from "@/context/GenerateStepsContext";
+import { StreamableStateProvider } from "@/context/StreamableStateContext";
 import { useStreamableState } from "@/utils/hooks/useStreamableState";
 import type { AIAnswer } from "types";
 
@@ -17,15 +18,11 @@ export const maxDuration = 30;
 const StepComponents = [GenerateForm, PromptSelector, VideoVisualiser];
 
 const Steps = () => {
-  const [state, updateState] = useStreamableState<AIAnswer>({
-    quotes: [],
-  });
-
   return (
     <>
       {StepComponents.map((Component, idx) => (
         <StepContainer key={idx} relatedStep={idx}>
-          <Component prompts={state} updateState={updateState} />
+          <Component />
         </StepContainer>
       ))}
     </>
@@ -35,10 +32,12 @@ const Steps = () => {
 export default function Generate() {
   return (
     <GenerateStepsProvider>
-      <div className="relative flex h-full justify-center items-center overflow-hidden pl-[88px] sm:pl-0 rounded-lg border border-secondary-50 border-opacity-70">
-        <Steps />
-        <ProgressTracker />
-      </div>
+      <StreamableStateProvider>
+        <div className="relative flex h-full justify-center items-center overflow-hidden pl-[88px] sm:pl-0 rounded-lg border border-secondary-50 border-opacity-70">
+          <Steps />
+          <ProgressTracker />
+        </div>
+      </StreamableStateProvider>
     </GenerateStepsProvider>
   );
 }

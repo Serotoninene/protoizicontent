@@ -1,12 +1,4 @@
-import React from "react";
-import type { AIAnswer } from "types";
-
-type Props = {
-  prompts?: AIAnswer;
-  updateState?: (object: any) => void;
-};
-
-const VideoVisualiser = (_: Props) => {
+const VideoVisualiser = () => {
   return <div>VideoVisualiser</div>;
 };
 
