@@ -3,6 +3,7 @@
 import React, {
   createContext,
   useContext,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -19,9 +20,10 @@ const isExtendedContext = createContext<{
 
 export const IsExtendedProvider = ({ children }: { children: ReactNode }) => {
   const [isExtended, setIsExtended] = useState(false);
+  const value = useMemo(() => ({ isExtended, setIsExtended }), [isExtended]);
 
   return (
-    <isExtendedContext.Provider value={{ isExtended, setIsExtended }}>
+    <isExtendedContext.Provider value={value}>
       {children}
     </isExtendedContext.Provider>
   );

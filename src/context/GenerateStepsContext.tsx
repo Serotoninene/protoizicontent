@@ -2,6 +2,7 @@ import React, {
   createContext,
   type ReactNode,
   useContext,
+  useMemo,
   useState,
 } from "react";
 
@@ -31,10 +32,17 @@ export const GenerateStepsProvider = ({
     setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length));
   };
 
+  const value = useMemo(
+    () => ({
+      steps,
+      currentStep,
+      moveStepForward,
+    }),
+    [currentStep],
+  );
+
   return (
-    <GenerateStepsContext.Provider
-      value={{ steps, currentStep, moveStepForward }}
-    >
+    <GenerateStepsContext.Provider value={value}>
       {children}
     </GenerateStepsContext.Provider>
   );

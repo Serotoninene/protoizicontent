@@ -1,14 +1,15 @@
+import { useSelectedPromptsContext } from "@/context/SelectedPromptsContext";
 import { useGenerateStepsContext } from "@/context/GenerateStepsContext";
 import { useStreamableStateContext } from "@/context/StreamableStateContext";
+
 import SecondaryButton from "@/ui/atoms/SecondaryButton";
 import { SparklesIcon } from "@heroicons/react/24/solid";
-import React, { useState } from "react";
-import type { AIAnswer, Quote } from "types";
+import type { Quote } from "types";
 
 const PromptSelector = () => {
   const { state } = useStreamableStateContext();
   const { moveStepForward } = useGenerateStepsContext();
-  const [selectedPrompts, setSelectedPrompts] = useState<Quote[]>(state.quotes);
+  const { selectedPrompts, setSelectedPrompts } = useSelectedPromptsContext();
 
   const handleSelect = (prompt: Quote) => {
     if (selectedPrompts.includes(prompt)) {
